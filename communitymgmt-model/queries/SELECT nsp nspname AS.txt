@@ -1,0 +1,25 @@
+SELECT nsp.nspname AS esquema,
+       r.rolname AS usuario,
+       has_schema_privilege(r.rolname, nsp.nspname, 'USAGE') AS tiene_uso,
+       has_schema_privilege(r.rolname, nsp.nspname, 'CREATE') AS puede_crear
+FROM pg_namespace nsp
+JOIN pg_roles r ON r.rolname = 'acollyte'
+WHERE nsp.nspname = 'communitymgmt';
+
+SELECT table_schema, table_name 
+FROM information_schema.tables 
+WHERE table_schema = 'communitymgmt';
+
+
+SELECT datname, has_database_privilege('acollyte', datname, 'CONNECT')
+FROM pg_database;
+
+select * from pg_catalog.pg_namespace;
+--select * from pg_catalog.pg_class;
+--select * from pg_catalog.information_schema;
+
+
+--GRANT USAGE ON SCHEMA communitymgmt TO acollyte;
+--GRANT SELECT ON ALL TABLES IN SCHEMA communitymgmt TO acollyte;
+
+--ALTER SCHEMA communitymgmt OWNER TO pg_database_owner;
