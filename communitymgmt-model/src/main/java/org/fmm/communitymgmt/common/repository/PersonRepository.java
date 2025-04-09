@@ -3,7 +3,7 @@ package org.fmm.communitymgmt.common.repository;
 import java.util.List;
 
 import org.fmm.communitymgmt.common.model.Person;
-import org.fmm.communitymgmt.common.model.SocialUser;
+import org.fmm.communitymgmt.common.model.Relationship;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

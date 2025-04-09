@@ -10,8 +10,8 @@ import jakarta.annotation.PostConstruct;
 
 @Configuration
 //@EnableAutoConfiguration
-@EntityScan(basePackages = {"org.fmm.communitymgmt.common.model"})
-@EnableJpaRepositories(basePackages = {"org.fmm.communitymgmt.common.repository"})
+@EntityScan(basePackages = {"org.fmm.communitymgmt.common.model","org.fmm.oauth2.common.model.model"})
+@EnableJpaRepositories(basePackages = {"org.fmm.communitymgmt.common.repository","org.fmm.oauth2.common.model.repository"})
 @PropertySource(value="classpath:lib-test-application.yaml", factory = YamlPropertySourceFactory.class)
 public class CommunityMgmtCommonTestConfiguration {
 	@PostConstruct

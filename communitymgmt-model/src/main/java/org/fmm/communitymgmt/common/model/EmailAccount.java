@@ -1,7 +1,19 @@
 package org.fmm.communitymgmt.common.model;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 
 
 /**
@@ -11,6 +23,9 @@ import jakarta.persistence.*;
 @Entity
 @Table(name="email_account")
 @NamedQuery(name="EmailAccount.findAll", query="SELECT e FROM EmailAccount e")
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "id")
 public class EmailAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -23,6 +38,7 @@ public class EmailAccount implements Serializable {
 
 	//bi-directional many-to-one association to Person
 	@ManyToOne
+	@JsonBackReference
 	private Person person;
 
 	public EmailAccount() {

@@ -16,7 +16,6 @@ public abstract class Relationship implements Serializable {
 
 	@Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	// FMMP por aquí, hay que crear la secuencia en postgresql
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "relationship_seq")
     @SequenceGenerator(name = "relationship_seq", sequenceName = "communitymgmt.relationship_seq", allocationSize = 1)
 	private Integer id;
@@ -29,6 +28,8 @@ public abstract class Relationship implements Serializable {
 	@JoinColumn(name="address_id")
 	private Address address;
 
+	@Column
+	private Integer orderList;
 	public Relationship() {
 	}
 

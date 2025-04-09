@@ -38,4 +38,19 @@ public interface RelationshipRepository extends JpaRepository<Relationship, Inte
     // También puedes usar @Query si necesitas una consulta personalizada
     @Query("SELECT r FROM Relationship r WHERE TYPE(r) = :subclass")
     List<Relationship> findAllBySubclass(@Param("subclass") Class<?> subclass);
+    
+    
+    @Query("SELECT r FROM Relationship r"
+    		+ " LEFT JOIN RMarriage rm on TYPE(r) = RMarriage"
+    		+ " LEFT JOIN rm.husband h"
+    		+ " LEFT JOIN rm.wife w"
+    		+ " LEFT JOIN RSingle rs ON TYPE(r) = RSingle"
+    		+ " LEFT JOIN rs.person s"
+    		+ " LEFT JOIN ROther ro ON type(r) = ROther"
+    		+ " LEFT JOIN ROthersPerson rop ON TYPE(r) = ROther"
+    		+ " LEFT JOIN rop.person o"
+    		+ " ORDER BY r.orderList, r.relationshipName")
+    List<Relationship> listCommunityOrderByDefault();
+    
+    
 }

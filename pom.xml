@@ -11,5 +11,6 @@
     </properties>
 	<modules>
 		<module>communitymgmt-model</module>
+        <module>communitymgmt-login</module>
 	</modules>
 </project>

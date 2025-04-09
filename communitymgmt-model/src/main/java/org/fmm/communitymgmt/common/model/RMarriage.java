@@ -3,6 +3,10 @@ package org.fmm.communitymgmt.common.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -21,6 +25,9 @@ import jakarta.persistence.TemporalType;
 @Table(name="r_marriage")
 @NamedQuery(name="RMarriage.findAll", query="SELECT r FROM RMarriage r")
 @PrimaryKeyJoinColumn(name = "id")
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "id")
 public class RMarriage extends Relationship implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -32,11 +39,13 @@ public class RMarriage extends Relationship implements Serializable {
 	//bi-directional many-to-one association to Person
 	@ManyToOne
 	@JoinColumn(name="husband_id")
+	@JsonBackReference
 	private Person husband;
 
 	//bi-directional many-to-one association to Person
 	@ManyToOne
 	@JoinColumn(name="wife_id")
+	@JsonBackReference
 	private Person wife;
 
 	public RMarriage() {

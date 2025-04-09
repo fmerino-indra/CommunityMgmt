@@ -6,6 +6,10 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 /**
  * The persistent class for the r_others database table.
@@ -14,6 +18,9 @@ import java.util.List;
 @Entity
 @Table(name="r_others")
 @NamedQuery(name="ROther.findAll", query="SELECT r FROM ROther r")
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "id")
 public class ROther extends Relationship implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -24,6 +31,7 @@ public class ROther extends Relationship implements Serializable {
 
 	//bi-directional many-to-one association to ROthersPerson
 	@OneToMany(mappedBy="ROther", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
 	private List<ROthersPerson> ROthersPersons;
 
 	public ROther() {

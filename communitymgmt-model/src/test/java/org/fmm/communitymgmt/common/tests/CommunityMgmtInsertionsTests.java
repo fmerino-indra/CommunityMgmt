@@ -2,12 +2,17 @@ package org.fmm.communitymgmt.common.tests;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.fmm.communitymgmt.common.model.EmailAccount;
+import org.fmm.communitymgmt.common.model.Image;
 import org.fmm.communitymgmt.common.model.MobileNumber;
 import org.fmm.communitymgmt.common.model.Person;
 import org.fmm.communitymgmt.common.model.RMarriage;
@@ -25,6 +30,7 @@ import org.fmm.communitymgmt.common.repository.SingleRepository;
 import org.fmm.communitymgmt.common.testconfig.CommunityMgmtCommonTestConfiguration;
 import org.fmm.communitymgmt.common.util.DateUtil;
 import org.fmm.communitymgmt.common.util.Gender;
+import org.fmm.communitymgmt.common.util.MimeTypeUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -37,10 +43,12 @@ import org.springframework.util.Assert;
 // Esto configura springboot completo para tests integrados.
 // Para JPA es mejor @DataJPATest
 //@SpringBootTest(classes = {CommunityMgmtCommonTestApplication.class})
-//@EntityScan(basePackages = {"org.fmm.acollyte.common"})
-//@EnableJpaRepositories(basePackages = {"org.fmm.acollyte.common","org.fmm.acollyte.acollyteadmin"})
+//@EntityScan(basePackages = {"org.fmm.communitymgmt.common.model","org.fmm.oauth2.common.model.model"})
+//@EnableJpaRepositories(basePackages = {"org.fmm.communitymgmt.common.repository","org.fmm.oauth2.common.model.repository"})
+
 @Rollback(false)
 @DataJpaTest
+// No reemplaces la base de datos real por una embebida.
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 //@Import(CommunityMgmtCommonTestConfiguration.class)
 @ContextConfiguration(classes = CommunityMgmtCommonTestConfiguration.class)
@@ -92,7 +100,7 @@ class CommunityMgmtInsertionsTests {
 		lista.addAll(singles);
 	}
 //	@Transactional
-	@Test
+//	@Test
 	void addPersonsJPQL() {
 		Person husband;
 		Person wife;
@@ -102,6 +110,7 @@ class CommunityMgmtInsertionsTests {
 		
 		husband = addPersonJPQL(Gender.M,"Félix","Merino","Martínez de Pinillos", null, "felix.merino@gmail.com", "660959325", 1970,3,21);
 		wife = addPersonJPQL(Gender.F,"María Teresa","Cabanes","Miró", "Mayte", "mayte.cabanes@gmail.com", "650959325", 1976,5,4);
+		addPhoto(wife, "mayte.png");
 		addMarriage(husband, wife, DateUtil.from(1999, 10, 31));
 /*		
 		husband = addPersonJPQL(Gender.M,"","","", "", null, null, ,,);
@@ -125,6 +134,10 @@ class CommunityMgmtInsertionsTests {
 		addMarriage(husband, wife, DateUtil.from(2000,1 ,1 ));
 		
 		single = addPersonJPQL(Gender.M, "Juan Antonio", null, null, null, null, null, 1950, 1, 1);
+		addSingle(single);
+
+		single = addPersonJPQL(Gender.M, "Guillermo", "Melgares", null, null, null, null, 1960, 1, 1);
+		addPhoto(single, "guillermo.png");
 		addSingle(single);
 
 		other1 = addPersonJPQL(Gender.F,"María Rosa","Perea","", "Rosa", null, null, 1960,1,1);
@@ -210,5 +223,58 @@ class CommunityMgmtInsertionsTests {
 		if (phone != null)
 			Assert.notNull(mn.getId(), "El id Phone no puede ser nulo");
 		return aux;
+	}
+	
+	private void addPhoto (Person person, String photoName) {
+		Path basePath = Paths.get("/home/felix/workspaces/java-2025-01/CommunityMgmt/imgs");
+		Path imagePath = basePath.resolve(photoName);
+		
+//		if (Files.notExists(basePath)) {
+//			Files.createDirectories(basePath);
+//			System.out.println("Directorio creado: " + basePath);
+//		} else {
+//			System.out.println("El directorio ya existe");
+//		}
+		byte[] imageBytes = null;
+		try {
+			imageBytes = Files.readAllBytes(imagePath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Assert.notNull(imageBytes, "La imagen no puede ser nula");
+		System.out.println("Archivo leído: " + imageBytes.length);
+		
+		Image photo = new Image();
+		photo.setPhoto(imageBytes);
+		photo.setMimeType(MimeTypeUtil.getMimeType(imagePath.toString()));
+		person.setImage(photo);
+		personRepository.save(person);
+		
+	}
+	
+//	@Test
+	public void imagenes() throws Exception {
+		Path basePath = Paths.get("/home/felix/workspaces/java-2025-01/CommunityMgmt/imgs");
+		Path imagePath = basePath.resolve("mayte.png");
+		
+		if (Files.notExists(basePath)) {
+			Files.createDirectories(basePath);
+			System.out.println("Directorio creado: " + basePath);
+		} else {
+			System.out.println("El directorio ya existe");
+		}
+		
+		byte[] imageBytes = Files.readAllBytes(imagePath);
+		System.out.println("Archivo leído: " + imageBytes.length);
+		
+		Optional<Person> mayteOpt = personRepository.findById(2);
+		if (mayteOpt.isPresent()) {
+			Person mayte = mayteOpt.get();
+			Image photo = new Image();
+			photo.setPhoto(imageBytes);
+			photo.setMimeType(MimeTypeUtil.getMimeType(imagePath.toString()));
+			mayte.setImage(photo);
+			personRepository.save(mayte);
+		}
 	}
 }

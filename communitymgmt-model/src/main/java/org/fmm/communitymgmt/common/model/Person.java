@@ -6,18 +6,23 @@ import java.util.Date;
 import java.util.List;
 
 import org.fmm.communitymgmt.common.util.Gender;
+import org.fmm.oauth2.common.model.model.AbstractPerson;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
@@ -30,12 +35,12 @@ import jakarta.persistence.TemporalType;
  */
 @Entity
 @NamedQuery(name="Person.findAll", query="SELECT p FROM Person p")
-public class Person implements Serializable {
+@DiscriminatorValue("PERSON")
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "id")
+public class Person extends AbstractPerson implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
 
 	@Temporal(TemporalType.DATE)
 	private Date birthday;
@@ -58,10 +63,12 @@ public class Person implements Serializable {
 
 	//bi-directional many-to-one association to EmailAccount
 	@OneToMany(mappedBy="person", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
 	private List<EmailAccount> emailAccounts;
 
 	//bi-directional many-to-one association to MobileNumber
 	@OneToMany(mappedBy="person", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
 	private List<MobileNumber> mobileNumbers;
 
 	//bi-directional many-to-many association to AppRole
@@ -75,38 +82,16 @@ public class Person implements Serializable {
 			@JoinColumn(name="app_role_id")
 			}
 		)
+	@JsonIgnore
 	private List<AppRole> appRoles;
 
-/* Creo que no queremos la relación bidireccional
-	//bi-directional many-to-one association to RMarriage
-	@OneToMany(mappedBy="person1")
-	private List<RMarriage> RMarriages1;
-
-	//bi-directional many-to-one association to RMarriage
-	@OneToMany(mappedBy="person2")
-	private List<RMarriage> RMarriages2;
-
-	//bi-directional many-to-one association to ROthersPerson
-	@OneToMany(mappedBy="person")
-	private List<ROthersPerson> ROthersPersons;
-
-	//bi-directional many-to-one association to RSingle
-	@OneToMany(mappedBy="person")
-	private List<RSingle> RSingles;
-*/
-	//bi-directional many-to-one association to SocialUser
-	@OneToMany(mappedBy="person")
-	private List<SocialUser> socialUsers;
-
+//	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "image_id", referencedColumnName="id")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private Image image;
+	
 	public Person() {
-	}
-
-	public Integer getId() {
-		return this.id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public Date getBirthday() {
@@ -222,115 +207,12 @@ public class Person implements Serializable {
 	public void setAppRoles(List<AppRole> appRoles) {
 		this.appRoles = appRoles;
 	}
-/*
-	public List<RMarriage> getRMarriages1() {
-		return this.RMarriages1;
+
+	public Image getImage() {
+		return image;
 	}
 
-	public void setRMarriages1(List<RMarriage> RMarriages1) {
-		this.RMarriages1 = RMarriages1;
+	public void setImage(Image image) {
+		this.image = image;
 	}
-
-	public RMarriage addRMarriages1(RMarriage RMarriages1) {
-		getRMarriages1().add(RMarriages1);
-		RMarriages1.setPerson1(this);
-
-		return RMarriages1;
-	}
-
-	public RMarriage removeRMarriages1(RMarriage RMarriages1) {
-		getRMarriages1().remove(RMarriages1);
-		RMarriages1.setPerson1(null);
-
-		return RMarriages1;
-	}
-
-	public List<RMarriage> getRMarriages2() {
-		return this.RMarriages2;
-	}
-
-	public void setRMarriages2(List<RMarriage> RMarriages2) {
-		this.RMarriages2 = RMarriages2;
-	}
-
-	public RMarriage addRMarriages2(RMarriage RMarriages2) {
-		getRMarriages2().add(RMarriages2);
-		RMarriages2.setPerson2(this);
-
-		return RMarriages2;
-	}
-
-	public RMarriage removeRMarriages2(RMarriage RMarriages2) {
-		getRMarriages2().remove(RMarriages2);
-		RMarriages2.setPerson2(null);
-
-		return RMarriages2;
-	}
-
-	public List<ROthersPerson> getROthersPersons() {
-		return this.ROthersPersons;
-	}
-
-	public void setROthersPersons(List<ROthersPerson> ROthersPersons) {
-		this.ROthersPersons = ROthersPersons;
-	}
-
-	public ROthersPerson addROthersPerson(ROthersPerson ROthersPerson) {
-		getROthersPersons().add(ROthersPerson);
-		ROthersPerson.setPerson(this);
-
-		return ROthersPerson;
-	}
-
-	public ROthersPerson removeROthersPerson(ROthersPerson ROthersPerson) {
-		getROthersPersons().remove(ROthersPerson);
-		ROthersPerson.setPerson(null);
-
-		return ROthersPerson;
-	}
-
-	public List<RSingle> getRSingles() {
-		return this.RSingles;
-	}
-
-	public void setRSingles(List<RSingle> RSingles) {
-		this.RSingles = RSingles;
-	}
-
-	public RSingle addRSingle(RSingle RSingle) {
-		getRSingles().add(RSingle);
-		RSingle.setPerson(this);
-
-		return RSingle;
-	}
-
-	public RSingle removeRSingle(RSingle RSingle) {
-		getRSingles().remove(RSingle);
-		RSingle.setPerson(null);
-
-		return RSingle;
-	}
-
-	public List<SocialUser> getSocialUsers() {
-		return this.socialUsers;
-	}
-
-	public void setSocialUsers(List<SocialUser> socialUsers) {
-		this.socialUsers = socialUsers;
-	}
-
-	public SocialUser addSocialUser(SocialUser socialUser) {
-		getSocialUsers().add(socialUser);
-		socialUser.setPerson(this);
-
-		return socialUser;
-	}
-
-	public SocialUser removeSocialUser(SocialUser socialUser) {
-		getSocialUsers().remove(socialUser);
-		socialUser.setPerson(null);
-
-		return socialUser;
-	}
-*/
 }

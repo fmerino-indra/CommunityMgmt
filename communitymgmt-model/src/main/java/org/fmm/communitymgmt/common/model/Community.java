@@ -14,14 +14,15 @@ public class Community implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	private String city;
 
 	private String country;
 
-	private String name;
-
+	private Integer communityNumber;
+	
 	private String parrish;
 
 	public Community() {
@@ -51,20 +52,20 @@ public class Community implements Serializable {
 		this.country = country;
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getParrish() {
 		return this.parrish;
 	}
 
 	public void setParrish(String parrish) {
 		this.parrish = parrish;
+	}
+
+	public Integer getCommunityNumber() {
+		return communityNumber;
+	}
+
+	public void setCommunityNumber(Integer communityNumber) {
+		this.communityNumber = communityNumber;
 	}
 
 }
