@@ -8,9 +8,10 @@ import jakarta.persistence.*;
  * The persistent class for the r_others_persons database table.
  * 
  */
-@Entity
-@Table(name="r_others_persons")
-@NamedQuery(name="ROthersPerson.findAll", query="SELECT r FROM ROthersPerson r")
+//@Entity
+//@Table(name="r_others_persons")
+//@NamedQuery(name="ROthersPerson.findAll", query="SELECT r FROM ROthersPerson r")
+@Deprecated
 public class ROthersPerson implements Serializable {
 	private static final long serialVersionUID = 1L;
 

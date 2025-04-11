@@ -2,6 +2,12 @@ package org.fmm.communitymgmt.common.tests;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.fmm.communitymgmt.common.model.Relationship;
@@ -22,6 +28,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.Assert;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -73,18 +81,31 @@ class CommunityMgmtQueriesTests {
 		List<? extends Relationship> comunidad = null;
 		comunidad = relationshipRepository.listCommunityOrderByDefault();
 		Assert.notEmpty(comunidad, "La lista no puede estar vacía");
+		writeLargeJson(comunidad);
+	}
+	
+	private void writeLargeJson(List<? extends Relationship> largeList) {
+		Path path = Paths.get("queries", "comunidad-v2.json");
+		File file = path.toFile();
 		
 		ObjectMapper objectMapper = new ObjectMapper();
-		String listJson = null;
+		JsonFactory jFactory = objectMapper.getFactory(); 
+		JsonGenerator jGenerator = null;
+
 		try {
-			listJson = objectMapper.writeValueAsString(comunidad);
+			jGenerator = jFactory.createGenerator(new FileOutputStream(file));
+			jGenerator.writeStartArray();
+			for (Relationship r:largeList) {
+				objectMapper.writeValue(jGenerator, r);
+			}
+			jGenerator.writeEndArray();
+			jGenerator.close();
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		Assert.notNull(listJson, "Lista vacía");
-		System.out.println();
-		System.out.println(listJson);
-		System.out.println();
 	}
 }

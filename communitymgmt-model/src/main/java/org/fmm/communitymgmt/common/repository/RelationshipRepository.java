@@ -39,7 +39,7 @@ public interface RelationshipRepository extends JpaRepository<Relationship, Inte
     @Query("SELECT r FROM Relationship r WHERE TYPE(r) = :subclass")
     List<Relationship> findAllBySubclass(@Param("subclass") Class<?> subclass);
     
-    
+/* Esta cuando eran 2 relaciones 1:n    
     @Query("SELECT r FROM Relationship r"
     		+ " LEFT JOIN RMarriage rm on TYPE(r) = RMarriage"
     		+ " LEFT JOIN rm.husband h"
@@ -51,6 +51,16 @@ public interface RelationshipRepository extends JpaRepository<Relationship, Inte
     		+ " LEFT JOIN rop.person o"
     		+ " ORDER BY r.orderList, r.relationshipName")
     List<Relationship> listCommunityOrderByDefault();
-    
+*/
+    @Query("SELECT r FROM Relationship r"
+    		+ " LEFT JOIN RMarriage rm on TYPE(r) = RMarriage"
+    		+ " LEFT JOIN rm.husband h"
+    		+ " LEFT JOIN rm.wife w"
+    		+ " LEFT JOIN RSingle rs ON TYPE(r) = RSingle"
+    		+ " LEFT JOIN rs.person s"
+    		+ " LEFT JOIN ROther ro ON type(r) = ROther"
+      		+ " LEFT JOIN ro.relatedPersons o"
+    		+ " ORDER BY r.orderList, r.relationshipName")
+    List<Relationship> listCommunityOrderByDefault();
     
 }

@@ -2,6 +2,8 @@ package org.fmm.communitymgmt.common.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +30,12 @@ public class Image implements Serializable {
 
 //	@Lob
 	@Column(nullable = false, name = "photo", columnDefinition="bytea")
+	@JsonIgnore
 	private byte[] photo;
+
+//	@Lob
+	@Column(nullable = false, name = "photo_small", columnDefinition="bytea")
+	private byte[] smallPhoto;
 
 	@Column(name="mime_type")
 	private String mimeType;
@@ -62,6 +69,14 @@ public class Image implements Serializable {
 
 	public void setMimeType(String mimeType) {
 		this.mimeType = mimeType;
+	}
+
+	public byte[] getSmallPhoto() {
+		return smallPhoto;
+	}
+
+	public void setSmallPhoto(byte[] smallPhoto) {
+		this.smallPhoto = smallPhoto;
 	}
 
 //	public String getImageBase64() {

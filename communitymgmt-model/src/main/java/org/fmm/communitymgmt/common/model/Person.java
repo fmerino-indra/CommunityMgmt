@@ -8,6 +8,7 @@ import java.util.List;
 import org.fmm.communitymgmt.common.util.Gender;
 import org.fmm.oauth2.common.model.model.AbstractPerson;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -43,6 +44,7 @@ public class Person extends AbstractPerson implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date birthday;
 
 	@Enumerated(EnumType.STRING) // Guarda "M" o "F" como texto
@@ -55,6 +57,7 @@ public class Person extends AbstractPerson implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="passing_date")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date passingDate;
 
 	private String surname1;

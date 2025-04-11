@@ -39,13 +39,13 @@ public class RMarriage extends Relationship implements Serializable {
 	//bi-directional many-to-one association to Person
 	@ManyToOne
 	@JoinColumn(name="husband_id")
-	@JsonBackReference
+//	@JsonBackReference
 	private Person husband;
 
 	//bi-directional many-to-one association to Person
 	@ManyToOne
 	@JoinColumn(name="wife_id")
-	@JsonBackReference
+//	@JsonBackReference
 	private Person wife;
 
 	public RMarriage() {

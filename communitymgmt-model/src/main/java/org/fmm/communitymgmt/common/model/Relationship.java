@@ -1,7 +1,21 @@
 package org.fmm.communitymgmt.common.model;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.SequenceGenerator;
 
 
 /**
@@ -11,6 +25,16 @@ import jakarta.persistence.*;
 @Entity
 @NamedQuery(name="Relationship.findAll", query="SELECT r FROM Relationship r")
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonTypeInfo(
+	    use = JsonTypeInfo.Id.NAME,
+	    include = JsonTypeInfo.As.PROPERTY,
+	    property = "type"
+	)
+	@JsonSubTypes({
+	    @JsonSubTypes.Type(value = RMarriage.class, name = "Marriage"),
+	    @JsonSubTypes.Type(value = RSingle.class, name = "Single"),
+	    @JsonSubTypes.Type(value = ROther.class, name = "Other")
+	})
 public abstract class Relationship implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -1,6 +1,9 @@
 package org.fmm.communitymgmt.common.model;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 
@@ -24,6 +27,7 @@ public class MobileNumber implements Serializable {
 	//bi-directional many-to-one association to Person
 	@ManyToOne (cascade = CascadeType.ALL)
 	@JoinColumn(name = "person_id", insertable = true,updatable = true, nullable = false)
+	@JsonBackReference
 	private Person person;
 
 	public MobileNumber() {
