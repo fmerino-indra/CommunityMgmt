@@ -43,9 +43,9 @@ import jakarta.persistence.TemporalType;
 public class Person extends AbstractPerson implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Temporal(TemporalType.DATE)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private Date birthday;
+//	@Temporal(TemporalType.DATE)
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private Long birthday;
 
 	@Enumerated(EnumType.STRING) // Guarda "M" o "F" como texto
 	@Column(nullable = false, length = 1)
@@ -91,17 +91,17 @@ public class Person extends AbstractPerson implements Serializable {
 //	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "image_id", referencedColumnName="id")
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JsonManagedReference
+//	@JsonManagedReference
 	private Image image;
 	
 	public Person() {
 	}
 
-	public Date getBirthday() {
+	public Long getBirthday() {
 		return this.birthday;
 	}
 
-	public void setBirthday(Date birthday) {
+	public void setBirthday(Long birthday) {
 		this.birthday = birthday;
 	}
 

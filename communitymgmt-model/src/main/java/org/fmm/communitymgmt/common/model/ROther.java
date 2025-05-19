@@ -105,20 +105,16 @@ public class ROther extends Relationship implements Serializable {
 	}
 	
 	public Person addRelatedPerson(Person relatedPerson) {
-	if (getRelatedPersons() == null) {
-		setRelatedPersons(new ArrayList<Person>());
+		if (getRelatedPersons() == null) {
+			setRelatedPersons(new ArrayList<Person>());
+		}
+		getRelatedPersons().add(relatedPerson);
+		return relatedPerson;
 	}
-	getRelatedPersons().add(relatedPerson);
-	//ROthersPerson.setROther(this);
 
-	return relatedPerson;
-}
-
-public Person removeROthersPerson(Person relatedPerson) {
-	getRelatedPersons().remove(relatedPerson);
-//	ROthersPerson.setROther(null);
-
-	return relatedPerson;
-}
+	public Person removeROthersPerson(Person relatedPerson) {
+		getRelatedPersons().remove(relatedPerson);
+		return relatedPerson;
+	}
 
 }

@@ -81,4 +81,12 @@ public abstract class Relationship implements Serializable {
 		this.address = address;
 	}
 
+	public Integer getOrderList() {
+		return orderList;
+	}
+
+	public void setOrderList(Integer orderList) {
+		this.orderList = orderList;
+	}
+
 }

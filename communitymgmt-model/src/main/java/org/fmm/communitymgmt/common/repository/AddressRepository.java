@@ -1,6 +1,6 @@
 package org.fmm.communitymgmt.common.repository;
 
-import org.fmm.communitymgmt.common.model.Person;
+import org.fmm.communitymgmt.common.model.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
  * @author Félix merino
  */
 @Repository
-public interface AddressRepository extends JpaRepository<Person, Integer> {
+public interface AddressRepository extends JpaRepository<Address, Integer> {
 }

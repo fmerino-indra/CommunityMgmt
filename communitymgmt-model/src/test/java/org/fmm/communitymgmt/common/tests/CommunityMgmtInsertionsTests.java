@@ -2,7 +2,6 @@ package org.fmm.communitymgmt.common.tests;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,17 +10,22 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.fmm.communitymgmt.common.model.Community;
 import org.fmm.communitymgmt.common.model.EmailAccount;
 import org.fmm.communitymgmt.common.model.Image;
+import org.fmm.communitymgmt.common.model.Membership;
 import org.fmm.communitymgmt.common.model.MobileNumber;
 import org.fmm.communitymgmt.common.model.Person;
 import org.fmm.communitymgmt.common.model.RMarriage;
 import org.fmm.communitymgmt.common.model.ROther;
-import org.fmm.communitymgmt.common.model.ROthersPerson;
 import org.fmm.communitymgmt.common.model.RSingle;
 import org.fmm.communitymgmt.common.model.Relationship;
+import org.fmm.communitymgmt.common.model.TMembership;
+import org.fmm.communitymgmt.common.repository.CommunityRepository;
 import org.fmm.communitymgmt.common.repository.EmailAccountRepository;
 import org.fmm.communitymgmt.common.repository.MarriageRepository;
+import org.fmm.communitymgmt.common.repository.MembershipRepository;
+import org.fmm.communitymgmt.common.repository.MembershipTypeRepository;
 import org.fmm.communitymgmt.common.repository.MobileNumberRepository;
 import org.fmm.communitymgmt.common.repository.OthersRepository;
 import org.fmm.communitymgmt.common.repository.PersonRepository;
@@ -74,6 +78,15 @@ class CommunityMgmtInsertionsTests {
     
     @Autowired
     RelationshipRepository relationshipRepository;
+
+    @Autowired
+    CommunityRepository communityRepository;
+
+    @Autowired
+    MembershipRepository membershipRepository;
+    
+    @Autowired
+    MembershipTypeRepository membershipTypeRepository;
     
     @Autowired
     private Environment environment;
@@ -110,24 +123,31 @@ class CommunityMgmtInsertionsTests {
 		addOther(List.of(other1, other2));
 	}
 //	@Transactional
-	@Test
+//	@Test
 	void addPersonsJPQL() {
 		Person husband;
 		Person wife;
 		Person single;
+
+		husband = addPersonJPQL(Gender.M,"Miguel María","Soler","Areta", "Miguel", "653286044", "miguelyalmudena@hotmail.com", 1970,2,1);
+		wife = addPersonJPQL(Gender.F,"Almudena","Molero","", null, "660477633", "miguelyalmudena@hotmail.com", 1965,1,1);
+		addPhoto(wife, "almudena", "png");
+		addMarriage(husband, wife, DateUtil.from(1995, 1, 1));
 		
 		husband = addPersonJPQL(Gender.M,"Félix","Merino","Martínez de Pinillos", null, "660959325", "felix.merino@gmail.com", 1970,3,21);
-		wife = addPersonJPQL(Gender.F,"María Teresa","Cabanes","Miró", "Mayte", "650959325", "mayte.cabanes@gmail.com", 1976,5,4);
-		addPhoto(wife, "mayte.png", "mayte-small.png");
+		wife = addPersonJPQL(Gender.F,"María Teresa","Cabanes","Miró", "Mayte", "650676743", "mayte.cabanes@gmail.com", 1976,5,4);
+		addPhoto(wife, "mayte", "jpg");
 		addMarriage(husband, wife, DateUtil.from(1999, 10, 31));
 /*		
 		husband = addPersonJPQL(Gender.M,"","","", "", null, null, ,,);
 		wife = addPersonJPQL(Gender.F,"","","", "", null, null, ,,);
 		addMarriage(husband, wife, DateUtil.from(, , ));
 */
-		husband = addPersonJPQL(Gender.M,"José Antonio","Zarzuela","", "Zarzu", null, null,1960, 1,1);
+		husband = addPersonJPQL(Gender.M,"José Antonio","Zarzuela","", "Zarzu", "610596076", null,1960, 1,1);
+		addPhoto(husband, "zarzu", "png");
 		wife = addPersonJPQL(Gender.F,"Pino Rosa","","", "Pino", null, null,1960, 1 ,1);
 		addMarriage(husband, wife, DateUtil.from(1970,1,1 ));
+		addPhoto(wife,"pino","jpg");
 		
 		husband = addPersonJPQL(Gender.M,"Steven","Rooney","", "Steve", null, null, 1960,3,18);
 		wife = addPersonJPQL(Gender.F,"Magdalena","Medina","Balenciaga", null, null, null, 1950 ,1,1);
@@ -137,15 +157,17 @@ class CommunityMgmtInsertionsTests {
 		wife = addPersonJPQL(Gender.F,"Consuelo","","", null, null, null, 1965,1,1);
 		addMarriage(husband, wife, DateUtil.from(1965, 1,1));
 
-		husband = addPersonJPQL(Gender.M,"Ángel Luis","","", "Ángel", null, null, 1965,1,1);
-		wife = addPersonJPQL(Gender.F,"Yolanda","","", null, null, null,1972 ,1,1);
+		husband = addPersonJPQL(Gender.M,"Ángel Luis","","", "Ángel", "676474959", null, 1965,1,1);
+		addPhoto(husband, "angelluis", "jpg");
+		wife = addPersonJPQL(Gender.F,"Yolanda","","", null, "619553228", null,1972 ,1,1);
+		addPhoto(wife,"yolanda","jpg");
 		addMarriage(husband, wife, DateUtil.from(2000,1 ,1 ));
 		
 		single = addPersonJPQL(Gender.M, "Juan Antonio", null, null, null, null, null, 1950, 1, 1);
 		addSingle(single);
 
-		single = addPersonJPQL(Gender.M, "Guillermo", "Melgares", null, null, null, null, 1960, 1, 1);
-		addPhoto(single, "guillermo.png", "guillermo-small.png");
+		single = addPersonJPQL(Gender.M, "Guillermo", "Melgares", null, null, "617806438", "guiller1313@hotmail.com", 1960, 1, 1);
+		addPhoto(single, "guillermo", "jpg");
 		addSingle(single);
 
 		testOthersInsertion();
@@ -158,7 +180,8 @@ class CommunityMgmtInsertionsTests {
 		aux.setHusband(husband);
 		aux.setWife(wife);
 		aux.setDescription(String.format("Marriage of %s and %s - %tD", husband.getNickname(), wife.getNickname(), date));
-		aux.setRelationshipName(String.format("Marriage of %s and %s", husband.getNickname(), wife.getNickname()));
+		aux.setRelationshipName(String.format("%s and %s", husband.getNickname(), wife.getNickname()));
+		aux.setOrderList(10);
 		marriageRepository.save(aux);
 		return aux;
 	}
@@ -166,7 +189,8 @@ class CommunityMgmtInsertionsTests {
 	private RSingle addSingle(Person person) {
 		RSingle single = new RSingle();
 		single.setPerson(person);
-		single.setRelationshipName(String.format("Single brother of %s", person.getNickname()));
+		single.setRelationshipName(String.format("%s", person.getNickname()));
+		single.setOrderList(50);
 		singleRepository.save(single);
 		return single;
 	}
@@ -178,6 +202,7 @@ class CommunityMgmtInsertionsTests {
 		other.setCount(persons.size());
 		other.setRelationshipName(name.toString());
 		other.setDescription(name.toString());
+		other.setOrderList(30);
 		persons.stream().forEach(other::addRelatedPerson);
 		
 		othersRepository.save(other);
@@ -190,7 +215,7 @@ class CommunityMgmtInsertionsTests {
 		EmailAccount ea = null;
 		
 		aux = new Person();
-		aux.setBirthday(DateUtil.from(year, month, day));
+		aux.setBirthday(DateUtil.toEpochDays(year, month, day));
 		if (gender == Gender.M)
 			aux.setGender(Gender.M);
 		else
@@ -226,32 +251,32 @@ class CommunityMgmtInsertionsTests {
 		return aux;
 	}
 	
-	private void addPhoto (Person person, String photoName, String smallPhotoName) {
+	private void addPhoto (Person person, String photoName, String extension) {
 		Path basePath = Paths.get("/home/felix/workspaces/java-2025-01/CommunityMgmt/resources/imgs");
-		Path imagePath = basePath.resolve(photoName);
-		Path smallImagePath = basePath.resolve(smallPhotoName);
+		Path tinyPhotoPath = basePath.resolve(photoName+"-tiny."+extension);
+		Path smallPhotoPath = basePath.resolve(photoName+"-small."+extension);
 //		if (Files.notExists(basePath)) {
 //			Files.createDirectories(basePath);
 //			System.out.println("Directorio creado: " + basePath);
 //		} else {
 //			System.out.println("El directorio ya existe");
 //		}
-		byte[] imageBytes = null;
-		byte[] smallImageBytes = null;
+		byte[] tinyPhotoBytes = null;
+		byte[] smallPhotoBytes = null;
 		try {
-			imageBytes = Files.readAllBytes(imagePath);
-			smallImageBytes = Files.readAllBytes(smallImagePath);
+			tinyPhotoBytes = Files.readAllBytes(tinyPhotoPath);
+			smallPhotoBytes = Files.readAllBytes(smallPhotoPath);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Assert.notNull(imageBytes, String.format("La imagen %s no puede ser nula", photoName));
-		Assert.notNull(smallImageBytes, String.format("La imagen %s no puede ser nula", smallPhotoName));
+		Assert.notNull(smallPhotoBytes, String.format("La imagen %s no puede ser nula", smallPhotoPath.toString()));
+		Assert.notNull(tinyPhotoBytes, String.format("La imagen %s no puede ser nula", tinyPhotoPath.toString()));
 		
-		Image photo = new Image();
-		photo.setPhoto(imageBytes);
-		photo.setSmallPhoto(smallImageBytes);
-		photo.setMimeType(MimeTypeUtil.getMimeType(imagePath.toString()));
-		person.setImage(photo);
+		Image image = new Image();
+		image.setTinyPhoto(tinyPhotoBytes);
+		image.setSmallPhoto(smallPhotoBytes);
+		image.setMimeType(MimeTypeUtil.getMimeType(tinyPhotoPath.toString()));
+		person.setImage(image);
 		personRepository.save(person);
 		
 	}
@@ -259,8 +284,8 @@ class CommunityMgmtInsertionsTests {
 //	@Test
 	public void imagenes() throws Exception {
 		Path basePath = Paths.get("/home/felix/workspaces/java-2025-01/CommunityMgmt/imgs");
-		Path imagePath = basePath.resolve("mayte.png");
-		Path smallImagePath = basePath.resolve("mayte_small.png");
+		Path tinyImagePath = basePath.resolve("mayte-tiny.jpg");
+		Path smallImagePath = basePath.resolve("mayte_small.jpg");
 		
 		if (Files.notExists(basePath)) {
 			Files.createDirectories(basePath);
@@ -269,22 +294,70 @@ class CommunityMgmtInsertionsTests {
 			System.out.println("El directorio ya existe");
 		}
 		
-		byte[] imageBytes = Files.readAllBytes(imagePath);
+		byte[] tinyImageBytes = Files.readAllBytes(tinyImagePath);
 		byte[] smallImageBytes = Files.readAllBytes(smallImagePath);
-		System.out.println("Archivo leído large: " + imageBytes.length);
-		System.out.println("Archivo leído small: " + imageBytes.length);
+		System.out.println("Archivo leído large: " + tinyImageBytes.length);
+		System.out.println("Archivo leído small: " + smallImageBytes.length);
 		
 		Optional<Person> mayteOpt = personRepository.findById(2);
 		if (mayteOpt.isPresent()) {
 			Person mayte = mayteOpt.get();
-			Image photo = new Image();
-			photo.setMimeType(MimeTypeUtil.getMimeType(imagePath.toString()));
+			Image image = new Image();
+			image.setMimeType(MimeTypeUtil.getMimeType(tinyImagePath.toString()));
 
-			photo.setPhoto(imageBytes);
-			photo.setSmallPhoto(smallImageBytes);
+			image.setTinyPhoto(tinyImageBytes);
+			image.setSmallPhoto(smallImageBytes);
 
-			mayte.setImage(photo);
+			mayte.setImage(image);
 			personRepository.save(mayte);
 		}
+	}
+
+	@Test
+	public void addCommunities() {
+		Community com = new Community();
+		com = addCommunity("2", "Santa Catalina de Siena", "Juan de Urbieta", "51", "28007", "Madrid", "España", false);
+		addStandardMember(76, com);
+		addStandardMember(77, com);
+		
+		addStandardMember(80, com);
+		addStandardMember(81, com);
+
+		com = addCommunity("1", "San Pedro Regalado y San José de Calasanz", null, null, null, "Madrid", "España", false);
+		addStandardMember(80, com);
+		addStandardMember(81, com);
+	}
+	
+	private Membership addStandardMember(Integer pId, Community com) {
+		Optional<Person> personOpt = personRepository.findById(pId);
+		Person person = null;
+		Membership m = null;
+		TMembership tm = null;
+		if (personOpt.isPresent()) {
+			person = personOpt.get();
+			m = new Membership();
+			tm = membershipTypeRepository.findById(1).get();
+			m.setPerson(person);
+			m.setCommunity(com);
+			m.setMembershipType(tm);
+			m = membershipRepository.save(m);
+			assertNotNull(m, "Error al grabar Membership");
+		}
+		return m;
+	}
+	private Community addCommunity(String number, String parish, String address, String addressNumber, String postalCode, String city, String country, Boolean activated) {
+		Community com = new Community();
+		com.setCommunityNumber(number);
+		com.setParish(parish);
+		com.setParishAddress(address);
+		com.setParishAddressNumber(addressNumber);
+		com.setParishAddressPostalCode(postalCode);
+		com.setParishAddressCity(city);
+		com.setCountry(country);
+		com.setIsActivated(activated);
+		com = communityRepository.save(com);
+		assertNotNull(com);
+		assertNotNull(com.getId(), "Id NO generado correctamente");
+		return com;
 	}
 }

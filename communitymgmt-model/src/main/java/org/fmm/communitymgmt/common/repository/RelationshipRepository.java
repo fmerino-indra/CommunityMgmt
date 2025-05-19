@@ -15,9 +15,10 @@ import org.springframework.stereotype.Repository;
  * @author Félix merino
  */
 @Repository
+@Deprecated
 public interface RelationshipRepository extends JpaRepository<Relationship, Integer> {
     // Obtener todas las instancias de Relationship (que incluye todas las subclases)
-    List<Relationship> findBy();
+//    List<Relationship> findBy();
 
     @Query("SELECT rm FROM RMarriage rm"
     		+ " LEFT JOIN FETCH rm.husband h"
@@ -52,6 +53,7 @@ public interface RelationshipRepository extends JpaRepository<Relationship, Inte
     		+ " ORDER BY r.orderList, r.relationshipName")
     List<Relationship> listCommunityOrderByDefault();
 */
+    @Deprecated
     @Query("SELECT r FROM Relationship r"
     		+ " LEFT JOIN RMarriage rm on TYPE(r) = RMarriage"
     		+ " LEFT JOIN rm.husband h"
@@ -61,6 +63,18 @@ public interface RelationshipRepository extends JpaRepository<Relationship, Inte
     		+ " LEFT JOIN ROther ro ON type(r) = ROther"
       		+ " LEFT JOIN ro.relatedPersons o"
     		+ " ORDER BY r.orderList, r.relationshipName")
-    List<Relationship> listCommunityOrderByDefault();
+    List<Relationship> listCommunityTiny(@Param("communityId")Integer communityId);
+    
+    @Deprecated
+    @Query("SELECT r FROM Relationship r"
+    		+ " LEFT JOIN RMarriage rm on TYPE(r) = RMarriage"
+    		+ " LEFT JOIN rm.husband h"
+    		+ " LEFT JOIN rm.wife w"
+    		+ " LEFT JOIN RSingle rs ON TYPE(r) = RSingle"
+    		+ " LEFT JOIN rs.person s"
+    		+ " LEFT JOIN ROther ro ON type(r) = ROther"
+      		+ " LEFT JOIN ro.relatedPersons o"
+    		+ " ORDER BY r.orderList, r.relationshipName")
+    List<Relationship> listCommunityTinyOld(@Param("communityId")Integer communityId);
     
 }

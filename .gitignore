@@ -77,3 +77,6 @@ build/
 ### VS Code ###
 .vscode/
 /download-ok/
+/database/
+/login-social-front/
+/resources/

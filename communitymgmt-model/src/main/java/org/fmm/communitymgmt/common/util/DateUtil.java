@@ -99,5 +99,9 @@ public class DateUtil {
     public static Date from(int year, int month, int day) {
     	return Date.from(LocalDate.of(year, month, day).atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
+    
+    public static Long toEpochDays(int year, int month, int day) {
+    	return LocalDate.of(year, month, day).toEpochDay();
+    }
 
 }

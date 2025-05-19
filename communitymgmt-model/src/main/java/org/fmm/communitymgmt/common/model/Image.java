@@ -9,7 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 
@@ -29,13 +28,13 @@ public class Image implements Serializable {
 	private Integer id;
 
 //	@Lob
-	@Column(nullable = false, name = "photo", columnDefinition="bytea")
+	@Column(nullable = false, name = "photo_small", columnDefinition="bytea")
 	@JsonIgnore
-	private byte[] photo;
+	private byte[] smallPhoto;
 
 //	@Lob
-	@Column(nullable = false, name = "photo_small", columnDefinition="bytea")
-	private byte[] smallPhoto;
+	@Column(nullable = false, name = "photo_tiny", columnDefinition="bytea")
+	private byte[] tinyPhoto;
 
 	@Column(name="mime_type")
 	private String mimeType;
@@ -54,12 +53,12 @@ public class Image implements Serializable {
 		this.id = id;
 	}
 
-	public byte[] getPhoto() {
-		return this.photo;
+	public byte[] getTinyPhoto() {
+		return this.tinyPhoto;
 	}
 
-	public void setPhoto(byte[] photo) {
-		this.photo = photo;
+	public void setTinyPhoto(byte[] photo) {
+		this.tinyPhoto = photo;
 //		this.imageBase64 = convertToBase64();
 	}
 
