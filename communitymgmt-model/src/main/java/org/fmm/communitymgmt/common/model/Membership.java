@@ -61,6 +61,7 @@ public class Membership implements Serializable {
 	
 	@Column
 	private Integer orderList;
+	
 	public Membership() {
 	}
 
@@ -128,6 +129,18 @@ public class Membership implements Serializable {
 		return charge;
 	}
 
+	public List<TCharge> addCharges(List<TCharge> charges) {
+		if (charges != null) {
+			for (TCharge item: charges) {
+				addCharge(item);
+			}
+		}
+		return getCharges();
+	}
+
+
+	
+	
 	public TCharge removeROthersPerson(TCharge charge) {
 		getCharges().remove(charge);
 		return charge;

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DataJwtSecContext {
@@ -33,11 +34,6 @@ public class DataJwtSecContext {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public static String toJson(DataJwtSecContext secContext) throws JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.writeValueAsString(secContext);
-		
-	}
 	public List<Integer> getMyCommunitiesIds() {
 		return myCommunitiesIds;
 	}
@@ -49,5 +45,15 @@ public class DataJwtSecContext {
 	}
 	public void setMyCharges(Map<Integer, List<Integer>> myCharges) {
 		this.myCharges = myCharges;
+	}
+	public static String toJson(DataJwtSecContext secContext) throws JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		return objectMapper.writeValueAsString(secContext);
+		
+	}
+	public static DataJwtSecContext fromJson(String json) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		DataJwtSecContext secContext = objectMapper.readValue(json, DataJwtSecContext.class);
+		return secContext;
 	}
 }

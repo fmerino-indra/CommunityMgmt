@@ -1,4 +1,4 @@
-package org.fmm.communitymgmt.contrroller;
+package org.fmm.communitymgmt.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,8 @@ public class CommunityMgmtListController extends AbstractCommunityMgmtController
 	public ResponseEntity<List<Relationship>> getList(@PathVariable("communityId") Integer communityId) {
 		List<Relationship> response = null;
 		
-		response = relationshipService.getMembersOfCommunity(communityId);
+		//response = relationshipService.getMembersOfCommunity(communityId);
+		response = relationshipService.getRelationshipByCommunityId(communityId);
 		if (response != null && !response.isEmpty()) {
 			return ResponseEntity.ok(response);
 		} else {

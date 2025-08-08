@@ -1,4 +1,4 @@
-package org.fmm.communitymgmt.contrroller;
+package org.fmm.communitymgmt.controller;
 
 import java.util.Map;
 import java.util.Optional;
@@ -54,7 +54,7 @@ public class CommunityMgmtUserInfoController {
 		Jwt jwt = null;
 		Authentication auth = null;
 		JwtAuthenticationToken jwtAuthenticationToken = null;
-		SocialUserInfo socialUserInfo = null;
+//		SocialUserInfo socialUserInfo = null;
 		
 		Optional<UserInfoDTO> optUserInfoDto = null;
 		UserInfoDTO userInfoDTO = null;
@@ -82,8 +82,11 @@ public class CommunityMgmtUserInfoController {
 								return ResponseEntity.internalServerError().build();
 							}
 						}
+						return ResponseEntity.ok(userInfoDTO);
 					} else {
+						// OLD, to delete
 						// If doesn't exist, build a SocialUserInfo with Jwt values
+						/*
 						userInfoDTO = new UserInfoDTO();
 						
 						socialUserInfo = new SocialUserInfo(
@@ -96,7 +99,7 @@ public class CommunityMgmtUserInfoController {
 								jwt.getClaim("email_verified")
 								);
 						userInfoDTO.setSocialUserInfo(socialUserInfo);
-						
+						*/
 						// TODO Generalizar para diferentes providers
 //						socialUser = new SocialUser();
 //						socialUser.setEmail(jwt.getClaim("email"));
@@ -105,7 +108,6 @@ public class CommunityMgmtUserInfoController {
 //						socialUser.setIss(JwtUserInfo.GOOGLE_ISS);
 //						socialUser.setProvider(AuthProvider.google.toString());
 					}
-					return ResponseEntity.ok(userInfoDTO);
 	            }
             }
 		}
@@ -120,6 +122,17 @@ public class CommunityMgmtUserInfoController {
 			System.out.println(userInfoDTO);
 		}
 		userInfoDTO=userInfoService.createPersonAndSocialUser(userInfoDTO);
+		return ResponseEntity.ok(userInfoDTO);
+	}
+	
+	@PostMapping("/communities")
+    public ResponseEntity<UserInfoDTO> updateUserInfo(@RequestBody UserInfoDTO userInfoDTO,
+    		@AuthenticationPrincipal OAuth2Token principal) {
+		
+		if (principal != null) {
+			System.out.println(userInfoDTO);
+		}
+		userInfoDTO=userInfoService.createCommunity(userInfoDTO);
 		return ResponseEntity.ok(userInfoDTO);
 	}
 	

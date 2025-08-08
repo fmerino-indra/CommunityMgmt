@@ -1,4 +1,4 @@
-package org.fmm.communitymgmt.contrroller;
+package org.fmm.communitymgmt.controller;
 
 import java.util.Map;
 

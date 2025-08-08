@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
@@ -25,7 +26,8 @@ import jakarta.persistence.Table;
 @NamedQuery(name="EmailAccount.findAll", query="SELECT e FROM EmailAccount e")
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "id")
+		  property = "id",
+		  scope = EmailAccount.class)
 public class EmailAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -38,6 +40,7 @@ public class EmailAccount implements Serializable {
 
 	//bi-directional many-to-one association to Person
 	@ManyToOne
+	@JoinColumn(name = "person_id", insertable = true,updatable = true, nullable = false)
 	@JsonBackReference
 	private Person person;
 

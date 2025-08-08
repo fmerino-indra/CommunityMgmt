@@ -2,6 +2,8 @@ package org.fmm.communitymgmt.common.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +17,7 @@ import jakarta.persistence.Id;
  */
 @Entity
 //@NamedQuery(name="Community.findAll", query="SELECT c FROM Community c")
+@JsonView(InvitationJsonViews.ComplexInvitation.class)
 public class Community implements Serializable {
 	private static final long serialVersionUID = 1L;
 

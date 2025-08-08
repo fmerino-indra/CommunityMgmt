@@ -10,11 +10,15 @@ spring:
         hibernate.format_sql: true
         hibernate.use_sql_comments: true
         hibernate.type.descriptor.sql.BasicBinder: TRACE
+        hibernate.default_schema: communitymgmt
    datasource:
       platform: postgres
-      url: jdbc:postgresql://localhost:5432/communitymgmt?currentSchema=communitymgmt
-      username: acollyte
-      password: femema
+#      url: jdbc:postgresql://localhost:5432/communitymgmt?currentSchema=communitymgmt
+#      username: acollyte
+#      password: femema
+      url: jdbc:postgresql://ep-blue-cake-a2tn6acz-pooler.eu-central-1.aws.neon.tech:5432/neondb?currentSchema=communitymgmt&&sslmode=require&channelBinding=require
+      username: neondb_owner
+      password: npg_Hc8pmiuQU6RA
       driverClassName: org.postgresql.Driver
       hikari:
          maximum-pool-size: 10

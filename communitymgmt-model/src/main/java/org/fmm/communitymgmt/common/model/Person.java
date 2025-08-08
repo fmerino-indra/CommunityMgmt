@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
@@ -39,7 +40,9 @@ import jakarta.persistence.TemporalType;
 @DiscriminatorValue("PERSON")
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "id")
+		  property = "id",
+		  scope = Person.class)
+@JsonView(InvitationJsonViews.ComplexInvitation.class)
 public class Person extends AbstractPerson implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -94,6 +97,10 @@ public class Person extends AbstractPerson implements Serializable {
 //	@JsonManagedReference
 	private Image image;
 	
+	@Column(name="married", nullable=false)
+	private Boolean married = false;
+
+
 	public Person() {
 	}
 
@@ -217,5 +224,13 @@ public class Person extends AbstractPerson implements Serializable {
 
 	public void setImage(Image image) {
 		this.image = image;
+	}
+
+	public Boolean getMarried() {
+		return married;
+	}
+
+	public void setMarried(Boolean married) {
+		this.married = married;
 	}
 }

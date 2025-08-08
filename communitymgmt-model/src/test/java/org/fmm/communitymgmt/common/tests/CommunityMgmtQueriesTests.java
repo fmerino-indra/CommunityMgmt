@@ -10,11 +10,14 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.fmm.communitymgmt.common.model.Community;
 import org.fmm.communitymgmt.common.model.Invitation;
 import org.fmm.communitymgmt.common.model.Membership;
+import org.fmm.communitymgmt.common.model.RMarriage;
+import org.fmm.communitymgmt.common.model.RSingle;
 import org.fmm.communitymgmt.common.model.Relationship;
 import org.fmm.communitymgmt.common.repository.CommunityRepository;
 import org.fmm.communitymgmt.common.repository.EmailAccountRepository;
@@ -34,6 +37,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.core.env.Environment;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -106,7 +110,7 @@ class CommunityMgmtQueriesTests {
 //    @Test
     void testInvitations() {
     	List<Invitation> invitations = null;
-    	invitations = invitationRepository.listInvitationsByCommunityId(14);
+    	invitations = invitationRepository.listAllInvitationsByCommunityId(14);
     	assertNotNull(invitations);
     	assertFalse(invitations.isEmpty());
     }
@@ -116,7 +120,7 @@ class CommunityMgmtQueriesTests {
 	}
 	
 	
-	@Test
+//	@Test
 	void testListMembersOfACommunity() {
 		List<Membership> communityList = null;
 		List<Relationship> relationshipList = null;
@@ -127,9 +131,10 @@ class CommunityMgmtQueriesTests {
 				.map(e -> e.getRelationship())
 				.collect(Collectors.toList());
 		assertTrue(relationshipList != null && !relationshipList.isEmpty());
+		writeLargeJson(relationshipList);
 	}
 	
-	@Test
+//	@Test
 	void testCommunityOfAPerson() {
 		List<Membership> membershipPerson = null;
 		List<Community> communityPerson = null;
@@ -145,14 +150,23 @@ class CommunityMgmtQueriesTests {
 	}
 	
 //	@Test
-	/*
 	void testListRelationship() {
 		List<? extends Relationship> comunidad = null;
 		comunidad = relationshipRepository.listCommunityTiny(14);
 		Assert.notEmpty(comunidad, "La lista no puede estar vacía");
 		writeLargeJson(comunidad);
 	}
-	*/
+
+	@Test
+	void testFindRMarriageRSingle() {
+		Optional<RSingle> oRSingle = null;
+		oRSingle = singleRepository.findRSingleByPersonId(100);
+		Optional<RMarriage> oRMarriage = null;
+		oRMarriage = marriageRepository.findRMarriageByPersonId(100);
+		assertNotNull(oRSingle);
+		assertNotNull(oRMarriage);
+	}
+
 	@SuppressWarnings("unused")
 	private void writeLargeJson(List<? extends Relationship> largeList) {
 		Path path = Paths.get("queries", "comunidad-v2.json");

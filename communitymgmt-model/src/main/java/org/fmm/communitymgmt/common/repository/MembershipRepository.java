@@ -48,10 +48,12 @@ public interface MembershipRepository extends JpaRepository<Membership, Integer>
     
 	/**
 	 * Members of a Community
+	 * Trae doble relación, una por cada miembro y no hay forma de hacer Distinct
 	 * @param id
 	 * @return
 	 */
-    @Query("SELECT ms FROM Membership ms "
+    @Deprecated
+    @Query("SELECT DISTINCT ms FROM Membership ms "
     		+ " INNER JOIN FETCH ms.community c"
     		+ " INNER JOIN FETCH ms.membershipType t"
     		+ " INNER JOIN FETCH ms.relationship r"
@@ -63,7 +65,7 @@ public interface MembershipRepository extends JpaRepository<Membership, Integer>
     		+ " LEFT JOIN ROther ro ON type(r) = ROther"
       		+ " LEFT JOIN ro.relatedPersons o"
     		+ " WHERE c.id = :communityId"
-      		+ " ORDER BY r.orderList, r.relationshipName")
+      		+ " ORDER BY r.orderValue, r.relationshipName")
     List<Membership> findMembershipByCommunityId(@Param("communityId")Integer id);
     
 }

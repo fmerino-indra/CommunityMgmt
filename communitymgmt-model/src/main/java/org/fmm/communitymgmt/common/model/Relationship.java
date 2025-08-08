@@ -2,6 +2,8 @@ package org.fmm.communitymgmt.common.model;
 
 import java.io.Serializable;
 
+import org.fmm.communitymgmt.common.util.OrderListEnum;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -15,7 +17,10 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.PostLoad;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Transient;
 
 
 /**
@@ -52,8 +57,26 @@ public abstract class Relationship implements Serializable {
 	@JoinColumn(name="address_id")
 	private Address address;
 
-	@Column
-	private Integer orderList;
+//	@Enumerated(EnumType.ORDINAL)
+//	@Column(nullable = false, length = 1)
+	@Transient
+	private OrderListEnum orderList;
+	
+	@Column(nullable = false, length = 1, name = "order_list")
+	private Integer orderValue;
+	
+	@PostLoad
+	void fillOrder() {
+		if (orderValue != null) 
+			this.orderList = OrderListEnum.of(orderValue);
+	}
+	
+	@PrePersist
+	void fillPersistend() {
+		if (orderList != null)
+			this.orderValue = orderList.getId();
+	}
+	
 	public Relationship() {
 	}
 
@@ -81,11 +104,11 @@ public abstract class Relationship implements Serializable {
 		this.address = address;
 	}
 
-	public Integer getOrderList() {
+	public OrderListEnum getOrderList() {
 		return orderList;
 	}
 
-	public void setOrderList(Integer orderList) {
+	public void setOrderList(OrderListEnum orderList) {
 		this.orderList = orderList;
 	}
 

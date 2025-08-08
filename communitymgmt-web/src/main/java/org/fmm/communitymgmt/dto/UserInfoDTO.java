@@ -2,6 +2,7 @@ package org.fmm.communitymgmt.dto;
 
 import java.text.ParseException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -9,9 +10,10 @@ import java.util.stream.Collectors;
 
 import org.fmm.communitymgmt.common.model.Membership;
 import org.fmm.communitymgmt.common.model.Person;
-import org.fmm.communitymgmt.contrroller.SocialUserInfo;
+import org.fmm.communitymgmt.controller.SocialUserInfo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
@@ -23,26 +25,35 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
 public class UserInfoDTO {
+	protected UserInfoDTO() {
+		super();
+	}
+	
+	
+	public UserInfoDTO(SocialUserInfo socialUserInfo, Person person) {
+		this.socialUserInfo = socialUserInfo;
+		this.person = person;
+	}
 	private SocialUserInfo socialUserInfo = null;
 	private Person person = null;
 	// Is the selected community, only if person has only one
 	private CommunityDTO selectedCommunity = null;
-	private List<CommunityDTO> myCommunities = null;
+	private List<CommunityDTO> myCommunities = new ArrayList<>();
 	
 	private String dataJWT = null;
 	
 	public SocialUserInfo getSocialUserInfo() {
 		return socialUserInfo;
 	}
-	public void setSocialUserInfo(SocialUserInfo userInfo) {
-		this.socialUserInfo = userInfo;
-	}
+//	public void setSocialUserInfo(SocialUserInfo userInfo) {
+//		this.socialUserInfo = userInfo;
+//	}
 	public Person getPerson() {
 		return person;
 	}
-	public void setPerson(Person person) {
-		this.person = (Person)person;
-	}
+//	public void setPerson(Person person) {
+//		this.person = (Person)person;
+//	}
 	public List<CommunityDTO> getMyCommunities() {
 		return myCommunities;
 	}
@@ -118,6 +129,10 @@ public class UserInfoDTO {
 	public static SignedJWT parse(String jwtString) throws ParseException {
 		return SignedJWT.parse(jwtString);
 	}
+	/**
+	 * Set myCommunities from List<Membership>
+	 * @param memberships
+	 */
 	public void fromMembership(List<Membership> memberships) {
 		if (memberships != null) {
 			myCommunities =
@@ -135,6 +150,31 @@ public class UserInfoDTO {
 		return selectedCommunity;
 	}
 	public void setSelectedCommunity(CommunityDTO selectedCommunity) {
+		if (!myCommunities.contains(selectedCommunity)) {
+			addCommunityDTO(selectedCommunity);
+		}
 		this.selectedCommunity = selectedCommunity;
 	}
+	public void addCommunityDTO(CommunityDTO communityDTO) {
+		if (myCommunities == null) {
+			myCommunities = new ArrayList<CommunityDTO>();
+		}
+		myCommunities.add(communityDTO);
+	}
+	
+	public static void main(String[] args) {
+		String json = "{\"socialUserInfo\":{\"id\":6,\"name\":\"Felix\",\"email\":\"felix.merino.fotografo@gmail.com\",\"emailVerified\":false,\"providerId\":\"114749612519976518758\",\"provider\":\"google\",\"imageUrl\":\"https://lh3.googleusercontent.com/a/ACg8ocIcSA7JXJmUYojGV-18y4HB5XQUuB1X1w491YWOW_YYFNxLmw=s96-c\"},"
+				+ "\"person\":{\"id\":5,\"name\":\"Felix\",\"surname1\":\"Merino\",\"surname2\":\"Martinez de Pinillos\",\"nickname\":\"\",\"mobileNumbers\":[],"
+				+ "\"emailAccounts\":[{\"id\":5,\"emailAccount\":\"felix.merino.fotografo@gmail.com\"}],\"birthday\":79,\"gender\":\"M\"},\"selectedCommunity\":{\"myCommunityData\":{\"id\":null,\"communityNumber\":\"2\",\"parish\":\"Santa Catalina de Siena\",\"parishAddress\":\"Juan de Urbieta\",\"parishAddressNumber\":\"51\",\"parishAddressPostalCode\":\"28001\",\"parishAddressCity\":\"Madrid\",\"isActivated\":false},\"myCharges\":null},\"myCommunities\":[],\"dataJWT\":null}\n";
+		ObjectMapper objectMapper = new ObjectMapper();
+		UserInfoDTO userInfoDTO = null;
+		try {
+			userInfoDTO = objectMapper.readValue(json.getBytes(), UserInfoDTO.class);
+			System.out.println(userInfoDTO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
 }

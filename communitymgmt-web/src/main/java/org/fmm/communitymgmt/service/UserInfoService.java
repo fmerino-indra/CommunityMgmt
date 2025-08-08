@@ -11,4 +11,11 @@ public interface UserInfoService {
     public Optional<SocialUser> getSocialUserByProviderId(String providerId);
     public Optional<UserInfoDTO> getSocialUserInfoByProviderId(String providerId, Jwt jwt);
     public UserInfoDTO createPersonAndSocialUser(UserInfoDTO userInfoDTO);
+//	Optional<UserInfoDTO> getSocialUserInfoByUpnAndProvider(String upn, String provider);
+    /**
+     * Create Community.
+     * @param userInfoDTO
+     * @return UserInfoDTO
+     */
+	UserInfoDTO createCommunity(UserInfoDTO userInfoDTO);
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.fmm.communitymgmt.common.model.Membership;
 import org.fmm.communitymgmt.common.model.Person;
-import org.fmm.communitymgmt.contrroller.SocialUserInfo;
+import org.fmm.communitymgmt.controller.SocialUserInfo;
 
 public class UserInfoModel {
 	private SocialUserInfo socialUserInfo = null;

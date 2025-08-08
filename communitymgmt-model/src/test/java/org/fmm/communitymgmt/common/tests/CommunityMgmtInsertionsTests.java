@@ -35,6 +35,7 @@ import org.fmm.communitymgmt.common.testconfig.CommunityMgmtCommonTestConfigurat
 import org.fmm.communitymgmt.common.util.DateUtil;
 import org.fmm.communitymgmt.common.util.Gender;
 import org.fmm.communitymgmt.common.util.MimeTypeUtil;
+import org.fmm.communitymgmt.common.util.OrderListEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -181,7 +182,7 @@ class CommunityMgmtInsertionsTests {
 		aux.setWife(wife);
 		aux.setDescription(String.format("Marriage of %s and %s - %tD", husband.getNickname(), wife.getNickname(), date));
 		aux.setRelationshipName(String.format("%s and %s", husband.getNickname(), wife.getNickname()));
-		aux.setOrderList(10);
+		aux.setOrderList(OrderListEnum.MARRIAGES);
 		marriageRepository.save(aux);
 		return aux;
 	}
@@ -190,7 +191,7 @@ class CommunityMgmtInsertionsTests {
 		RSingle single = new RSingle();
 		single.setPerson(person);
 		single.setRelationshipName(String.format("%s", person.getNickname()));
-		single.setOrderList(50);
+		single.setOrderList(OrderListEnum.SINGLES);
 		singleRepository.save(single);
 		return single;
 	}
@@ -202,7 +203,7 @@ class CommunityMgmtInsertionsTests {
 		other.setCount(persons.size());
 		other.setRelationshipName(name.toString());
 		other.setDescription(name.toString());
-		other.setOrderList(30);
+		other.setOrderList(OrderListEnum.OTHERS);
 		persons.stream().forEach(other::addRelatedPerson);
 		
 		othersRepository.save(other);

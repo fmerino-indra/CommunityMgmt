@@ -6,8 +6,8 @@ import org.fmm.communitymgmt.common.model.Relationship;
 
 
 public interface RelationshipService {
-	@Deprecated
     public List<Relationship> getRelationshipByCommunityId(Integer communityId);
 	
+	@Deprecated
 	public List<Relationship> getMembersOfCommunity(Integer communityId);
 }
