@@ -2,7 +2,7 @@ package org.fmm.communitymgmt.dto;
 
 import org.fmm.communitymgmt.common.model.Community;
 import org.fmm.communitymgmt.common.model.Invitation;
-import org.fmm.communitymgmt.common.util.InvitationState;
+import org.fmm.communitymgmt.common.util.enums.InvitationStateEnum;
 
 public class InvitationDTO {
 	private Integer id;
@@ -12,7 +12,7 @@ public class InvitationDTO {
 	private Long exp;
 	private Long iat;
 	private String kpub;
-	private InvitationState state;
+	private InvitationStateEnum state;
 	private Integer communityId;
 	private Integer personId;
 	// This field indicates that the invitation is for two people (marriage)
@@ -29,7 +29,7 @@ public class InvitationDTO {
 		invitation.setName(dto.getName());
 		invitation.setNbf(dto.getNbf());
 		invitation.setResponsibleSignature(dto.getSignature());
-		invitation.setState(InvitationState.P);
+		invitation.setState(InvitationStateEnum.P);
 		invitation.setForMarriage(dto.forMarriage);
 		
 		return invitation;
@@ -76,10 +76,10 @@ public class InvitationDTO {
 	public void setKpub(String kpub) {
 		this.kpub = kpub;
 	}
-	public InvitationState getState() {
+	public InvitationStateEnum getState() {
 		return state;
 	}
-	public void setState(InvitationState state) {
+	public void setState(InvitationStateEnum state) {
 		this.state = state;
 	}
 	public Integer getCommunityId() {

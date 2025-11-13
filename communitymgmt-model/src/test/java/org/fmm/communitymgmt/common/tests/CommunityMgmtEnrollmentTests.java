@@ -17,7 +17,7 @@ import org.fmm.communitymgmt.common.model.InvitationJsonViews;
 import org.fmm.communitymgmt.common.model.InvitationRMarriage;
 import org.fmm.communitymgmt.common.model.InvitationRSingle;
 import org.fmm.communitymgmt.common.model.Person;
-import org.fmm.communitymgmt.common.model.TMembership;
+import org.fmm.communitymgmt.common.model.common.TMembership;
 import org.fmm.communitymgmt.common.repository.CommunityRepository;
 import org.fmm.communitymgmt.common.repository.InvitationMarriageRepository;
 import org.fmm.communitymgmt.common.repository.InvitationRelationshipRepository;
@@ -27,7 +27,7 @@ import org.fmm.communitymgmt.common.repository.MembershipRepository;
 import org.fmm.communitymgmt.common.repository.MembershipTypeRepository;
 import org.fmm.communitymgmt.common.repository.PersonRepository;
 import org.fmm.communitymgmt.common.testconfig.CommunityMgmtCommonTestConfiguration;
-import org.fmm.communitymgmt.common.util.InvitationState;
+import org.fmm.communitymgmt.common.util.enums.InvitationStateEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -92,7 +92,7 @@ class CommunityMgmtEnrollmentTests {
 	@Test
 	void testInvitationByPerson() {
 		List<Invitation> invitationList = null;
-		invitationList = invitationRepository.listAllInvitationsByPersonId(100, InvitationState.P);
+		invitationList = invitationRepository.listAllInvitationsByPersonId(100, InvitationStateEnum.P);
 		assertFalse(invitationList.isEmpty());
 				
 	}
@@ -163,7 +163,7 @@ class CommunityMgmtEnrollmentTests {
 		invitation.setIat(iat);
 		invitation.setNbf(iat);
 		invitation.setName(name);
-		invitation.setState(InvitationState.P);
+		invitation.setState(InvitationStateEnum.P);
 		invitation.setForMarriage(forMarriage);
 		invitation.setInvitationType(membershipType);
 		return invitationRepository.save(invitation);

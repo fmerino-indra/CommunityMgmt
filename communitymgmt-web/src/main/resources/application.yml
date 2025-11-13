@@ -4,7 +4,7 @@ spring:
    jpa:
       database: POSTGRESQL
       hibernate:
-         ddl-auto: update
+         ddl-auto: NONE
       properties:
         hibernate.show-sql: true
         hibernate.format_sql: true

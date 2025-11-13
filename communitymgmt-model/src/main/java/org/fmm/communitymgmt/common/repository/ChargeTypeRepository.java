@@ -1,6 +1,6 @@
 package org.fmm.communitymgmt.common.repository;
 
-import org.fmm.communitymgmt.common.model.TCharge;
+import org.fmm.communitymgmt.common.model.common.TCharge;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

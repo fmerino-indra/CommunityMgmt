@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.fmm.communitymgmt.common.util.Gender;
+import org.fmm.communitymgmt.common.util.enums.GenderEnum;
 import org.fmm.oauth2.common.model.model.AbstractPerson;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -52,7 +52,7 @@ public class Person extends AbstractPerson implements Serializable {
 
 	@Enumerated(EnumType.STRING) // Guarda "M" o "F" como texto
 	@Column(nullable = false, length = 1)
-	private Gender gender;
+	private GenderEnum gender;
 
 	private String name;
 
@@ -112,11 +112,11 @@ public class Person extends AbstractPerson implements Serializable {
 		this.birthday = birthday;
 	}
 
-	public Gender getGender() {
+	public GenderEnum getGender() {
 		return this.gender;
 	}
 
-	public void setGender(Gender gender) {
+	public void setGender(GenderEnum gender) {
 		this.gender = gender;
 	}
 

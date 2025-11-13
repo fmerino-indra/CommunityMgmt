@@ -2,7 +2,8 @@ package org.fmm.communitymgmt.common.model;
 
 import java.io.Serializable;
 
-import org.fmm.communitymgmt.common.util.InvitationState;
+import org.fmm.communitymgmt.common.model.common.TMembership;
+import org.fmm.communitymgmt.common.util.enums.InvitationStateEnum;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -90,7 +91,7 @@ public class Invitation implements Serializable {
 	@Enumerated(EnumType.STRING) // Guarda "M" o "F" como texto
 	@Column(nullable = false, length = 1)
 	@JsonView(InvitationJsonViews.SimpleInvitation.class)
-	private InvitationState state;
+	private InvitationStateEnum state;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 //	@JsonIdentityInfo(
@@ -155,11 +156,11 @@ public class Invitation implements Serializable {
 		this.iat = iat;
 	}
 
-	public InvitationState getState() {
+	public InvitationStateEnum getState() {
 		return state;
 	}
 
-	public void setState(InvitationState state) {
+	public void setState(InvitationStateEnum state) {
 		this.state = state;
 	}
 

@@ -1,8 +1,8 @@
-package org.fmm.communitymgmt.common.util;
+package org.fmm.communitymgmt.common.util.enums;
 
-import org.fmm.communitymgmt.common.model.TCharge;
+import org.fmm.communitymgmt.common.model.common.TCharge;
 
-public enum ChargeType {
+public enum ChargeEnum {
 	RESPONSIBLE(1,"Responsible"),
 	RESPONSIBLE_SPOUSE(2, "Responsible Spouse"),
 	CORESPONSIBLE(3, "Coresponsible"),
@@ -20,7 +20,7 @@ public enum ChargeType {
 	private final Integer id;
 	private final String charge;
 	
-	private ChargeType(Integer id, String charge) {
+	private ChargeEnum(Integer id, String charge) {
 		this.id = id;
 		this.charge = charge;
 	}

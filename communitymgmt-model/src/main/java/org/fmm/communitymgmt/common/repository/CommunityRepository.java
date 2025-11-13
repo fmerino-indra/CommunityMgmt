@@ -14,6 +14,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface CommunityRepository extends JpaRepository<Community, Integer> {
+	
+	@Query("SELECT c FROM Community c"
+			+ " WHERE c.id = :communityId")
+	Community findByIdFMM(@Param("communityId") Integer id);
+
 	@Query("SELECT c FROM Community c"
 			+ " WHERE c.id IN :ids")
 	List<Community> listCommunitiesByIds(@Param("ids") List<Integer> idList);

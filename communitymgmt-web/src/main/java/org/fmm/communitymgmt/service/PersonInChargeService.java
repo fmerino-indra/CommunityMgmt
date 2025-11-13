@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.fmm.communitymgmt.common.model.Community;
 import org.fmm.communitymgmt.common.model.Membership;
 import org.fmm.communitymgmt.common.model.Person;
-import org.fmm.communitymgmt.common.model.TCharge;
+import org.fmm.communitymgmt.common.model.common.TCharge;
 
 public interface PersonInChargeService {
 	public Community createCommunity(String communityNumber, String parish, String address, String addressNumber, String postalCode, String city, String country, Boolean activated);

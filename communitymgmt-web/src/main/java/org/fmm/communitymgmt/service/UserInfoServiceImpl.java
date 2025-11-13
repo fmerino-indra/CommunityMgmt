@@ -6,11 +6,11 @@ import java.util.Optional;
 import org.fmm.communitymgmt.common.model.Community;
 import org.fmm.communitymgmt.common.model.Membership;
 import org.fmm.communitymgmt.common.model.Person;
-import org.fmm.communitymgmt.common.model.TCharge;
+import org.fmm.communitymgmt.common.model.common.TCharge;
 import org.fmm.communitymgmt.common.repository.ChargeTypeRepository;
 import org.fmm.communitymgmt.common.repository.MembershipRepository;
 import org.fmm.communitymgmt.common.repository.PersonRepository;
-import org.fmm.communitymgmt.common.util.ChargeType;
+import org.fmm.communitymgmt.common.util.enums.ChargeEnum;
 import org.fmm.communitymgmt.controller.SocialUserInfo;
 import org.fmm.communitymgmt.dto.CommunityDTO;
 import org.fmm.communitymgmt.dto.UserInfoDTO;
@@ -134,7 +134,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		Community community = personInChargeService.createCommunity(communityDTO.getMyCommunityData());
 		
 		TCharge responsible = null;
-		responsible = chargeTypeRepository.getReferenceById(ChargeType.RESPONSIBLE.getId());  
+		responsible = chargeTypeRepository.getReferenceById(ChargeEnum.RESPONSIBLE.getId());  
 		
 		Membership m = personInChargeService.addMember(community, person, responsible);
 		

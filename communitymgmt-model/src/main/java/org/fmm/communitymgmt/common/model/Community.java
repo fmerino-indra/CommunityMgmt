@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 
 /**
@@ -23,6 +24,7 @@ public class Community implements Serializable {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Integer id;
 
 	@Column(name="community_number")
@@ -36,6 +38,11 @@ public class Community implements Serializable {
 	@Column(name = "activated")
 	private Boolean isActivated;
 	private String country;
+	
+	@OneToOne(mappedBy = "community")
+	//@OneToOne(cascade = CascadeType.ALL)
+	//@PrimaryKeyJoinColumn // En JPA 2.0 ha sido sustituido por MapsId
+	private CommunitySettings communitySettings;
 	
 	public Community() {
 	}

@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fmm.communitymgmt.common.model.common.TCharge;
+import org.fmm.communitymgmt.common.model.common.TMembership;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

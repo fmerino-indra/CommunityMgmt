@@ -27,6 +27,10 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Muestra los valores de los parámetros
     org.fmm.communitymgmt: DEBUG
 
+    org.springframework.jdbc.datasource.DriverManagerDataSource: DEBUG
+    org.springframework.boot.jdbc.DataSourceConfiguration: DEBUG
+    org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl: DEBUG    
+    
 #    org.hibernate.type.descriptor.sql: TRACE
     
 #    org.springframework.security: TRACE

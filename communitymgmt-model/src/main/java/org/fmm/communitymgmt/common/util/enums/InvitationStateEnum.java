@@ -1,6 +1,6 @@
-package org.fmm.communitymgmt.common.util;
+package org.fmm.communitymgmt.common.util.enums;
 
-public enum InvitationState {
+public enum InvitationStateEnum {
 	G("Generated"),
 	P("Processing"),
 	F("Finished");
@@ -8,7 +8,7 @@ public enum InvitationState {
 	
 	private final String description;
 	
-	InvitationState(String description) {
+	InvitationStateEnum(String description) {
 		this.description = description;
 	}
 	

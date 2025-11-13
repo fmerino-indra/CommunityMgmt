@@ -29,7 +29,7 @@ import org.fmm.communitymgmt.common.repository.OthersRepository;
 import org.fmm.communitymgmt.common.repository.PersonRepository;
 import org.fmm.communitymgmt.common.repository.RelationshipRepository;
 import org.fmm.communitymgmt.common.repository.SingleRepository;
-import org.fmm.communitymgmt.common.testconfig.CommunityMgmtCommonTestConfiguration;
+import org.fmm.communitymgmt.common.testconfig.CommunityMgmtJpaTestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -55,7 +55,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 // No reemplaces la base de datos real por una embebida.
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 //@Import(CommunityMgmtCommonTestConfiguration.class)
-@ContextConfiguration(classes = CommunityMgmtCommonTestConfiguration.class)
+@ContextConfiguration(classes = CommunityMgmtJpaTestConfiguration.class)
 class CommunityMgmtDtosTests {
 
     @Autowired

@@ -7,7 +7,7 @@ import java.util.Map;
 import org.fmm.communitymgmt.common.model.Community;
 import org.fmm.communitymgmt.common.model.Invitation;
 import org.fmm.communitymgmt.common.model.InvitationJsonViews;
-import org.fmm.communitymgmt.common.model.TMembership;
+import org.fmm.communitymgmt.common.model.common.TMembership;
 import org.fmm.communitymgmt.controller.interceptors.ParamSource;
 import org.fmm.communitymgmt.controller.interceptors.RequiresClaim;
 import org.fmm.communitymgmt.dto.DataJwtSecContext;

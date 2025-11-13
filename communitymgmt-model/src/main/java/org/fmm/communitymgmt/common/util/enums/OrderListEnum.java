@@ -1,4 +1,4 @@
-package org.fmm.communitymgmt.common.util;
+package org.fmm.communitymgmt.common.util.enums;
 
 import java.util.stream.Stream;
 

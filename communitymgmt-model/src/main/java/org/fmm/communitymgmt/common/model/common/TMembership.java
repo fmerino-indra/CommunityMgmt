@@ -1,4 +1,6 @@
-package org.fmm.communitymgmt.common.model;
+package org.fmm.communitymgmt.common.model.common;
+
+import org.fmm.communitymgmt.common.util.enums.MembershipTypeEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,6 +37,15 @@ public class TMembership {
 	}
 	public void setSameTime(Boolean sameTime) {
 		this.sameTime = sameTime;
+	}
+	
+	public static TMembership from(MembershipTypeEnum membershipTypeEnum) {
+		TMembership aux = null;
+	    aux = new TMembership();
+	    aux.setId(membershipTypeEnum.getId());
+	    aux.setMembership(membershipTypeEnum.getMembership());
+	    aux.setSameTime(membershipTypeEnum.getSameTime());
+	    return aux;
 	}
 
 }

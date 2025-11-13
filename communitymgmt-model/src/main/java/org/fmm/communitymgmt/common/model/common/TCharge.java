@@ -1,4 +1,6 @@
-package org.fmm.communitymgmt.common.model;
+package org.fmm.communitymgmt.common.model.common;
+
+import org.fmm.communitymgmt.common.util.enums.ChargeEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,5 +28,14 @@ public class TCharge {
 	}
 	public void setCharge(String charge) {
 		this.charge = charge;
+	}
+	
+	public static TCharge from(ChargeEnum chargeEnum) {
+		TCharge charge = new TCharge();
+		
+		charge.setId(chargeEnum.getId());
+		charge.setCharge(chargeEnum.getCharge());
+		
+		return charge;
 	}
 }

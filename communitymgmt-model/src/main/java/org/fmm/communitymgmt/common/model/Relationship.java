@@ -2,7 +2,7 @@ package org.fmm.communitymgmt.common.model;
 
 import java.io.Serializable;
 
-import org.fmm.communitymgmt.common.util.OrderListEnum;
+import org.fmm.communitymgmt.common.util.enums.OrderListEnum;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

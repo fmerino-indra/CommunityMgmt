@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.fmm.communitymgmt.common.model.Invitation;
-import org.fmm.communitymgmt.common.util.InvitationState;
+import org.fmm.communitymgmt.common.util.enums.InvitationStateEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,7 +29,7 @@ public interface InvitationRepository extends JpaRepository<Invitation, Integer>
     		+ " WHERE p.id = :personId"
     		+ " AND i.state = :state"
     		)
-    List<Invitation> listAllInvitationsByPersonId(@Param("personId")Integer personId, @Param("state") InvitationState state);
+    List<Invitation> listAllInvitationsByPersonId(@Param("personId")Integer personId, @Param("state") InvitationStateEnum state);
     
     @Query("SELECT i FROM Invitation i "
     		+ " INNER JOIN FETCH i.community c"

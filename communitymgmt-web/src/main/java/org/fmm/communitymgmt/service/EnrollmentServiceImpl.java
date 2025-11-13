@@ -20,9 +20,9 @@ import org.fmm.communitymgmt.common.repository.MarriageRepository;
 import org.fmm.communitymgmt.common.repository.PersonRepository;
 import org.fmm.communitymgmt.common.repository.RelationshipRepository;
 import org.fmm.communitymgmt.common.repository.SingleRepository;
-import org.fmm.communitymgmt.common.util.Gender;
-import org.fmm.communitymgmt.common.util.InvitationState;
-import org.fmm.communitymgmt.common.util.OrderListEnum;
+import org.fmm.communitymgmt.common.util.enums.GenderEnum;
+import org.fmm.communitymgmt.common.util.enums.InvitationStateEnum;
+import org.fmm.communitymgmt.common.util.enums.OrderListEnum;
 import org.fmm.communitymgmt.dto.SignatureDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,7 +75,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 		// Si ya tiene asignada una persona, se devuelve error. FMMP
 		if (invitationDev.getPerson() != null)
 			throw new RuntimeException("Invitation has been previously assigned. Contact your responsible");
-		invitationDev.setState(InvitationState.P);
+		invitationDev.setState(InvitationStateEnum.P);
 		invitationDev.setPerson(p);
 		invitationDev = invitationRepository.save(invitationDev);
 		
@@ -109,7 +109,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 			irm.setRelationshipName(invitation.getName());
 			irm.setDescription("Marriage of " + formatName(p));
 			irm.setOrderList(100);
-			if (Gender.M.equals(p.getGender())) {
+			if (GenderEnum.M.equals(p.getGender())) {
 				irm.setHusband(p);
 			} else {
 				irm.setWife(p);
@@ -137,7 +137,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
 	@Override
 	public List<Invitation> getInvitationsByPerson(Integer personId) {
-		return invitationRepository.listAllInvitationsByPersonId(personId, InvitationState.P);
+		return invitationRepository.listAllInvitationsByPersonId(personId, InvitationStateEnum.P);
 	}
 
 	@Override
@@ -215,7 +215,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 		String husbandName=null;
 		String wifeName=null;
 		
-		if (Gender.M == person.getGender()) {
+		if (GenderEnum.M == person.getGender()) {
 			husbandName = formatName(person);
 			wifeName = "Pending";
 		} else {

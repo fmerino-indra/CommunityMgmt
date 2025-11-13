@@ -19,6 +19,8 @@ import org.fmm.communitymgmt.common.model.Membership;
 import org.fmm.communitymgmt.common.model.RMarriage;
 import org.fmm.communitymgmt.common.model.RSingle;
 import org.fmm.communitymgmt.common.model.Relationship;
+import org.fmm.communitymgmt.common.model.templates.CelebrationCycleTemplate;
+import org.fmm.communitymgmt.common.model.templates.CelebrationEventTemplate;
 import org.fmm.communitymgmt.common.repository.CommunityRepository;
 import org.fmm.communitymgmt.common.repository.EmailAccountRepository;
 import org.fmm.communitymgmt.common.repository.InvitationRepository;
@@ -29,6 +31,8 @@ import org.fmm.communitymgmt.common.repository.OthersRepository;
 import org.fmm.communitymgmt.common.repository.PersonRepository;
 import org.fmm.communitymgmt.common.repository.RelationshipRepository;
 import org.fmm.communitymgmt.common.repository.SingleRepository;
+import org.fmm.communitymgmt.common.repository.templates.CelebrationCycleTemplateRepository;
+import org.fmm.communitymgmt.common.repository.templates.CelebrationEventTemplateRepository;
 import org.fmm.communitymgmt.common.testconfig.CommunityMgmtCommonTestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,11 +92,24 @@ class CommunityMgmtQueriesTests {
     @Autowired
     MembershipRepository membershipRepository;
 
-//    @Autowired
-//    MembershipRelationshipRepository membershipRelationshipRepository;
-    
     @Autowired
     InvitationRepository invitationRepository;
+
+    @Autowired
+    private CelebrationCycleTemplateRepository cctRepository;
+    
+    @Autowired
+    private CelebrationEventTemplateRepository cetRepository;
+    
+    
+	@Test
+	void testWordCycles() {
+		List<CelebrationCycleTemplate> cycles = cctRepository.findAll();
+		List<CelebrationEventTemplate> events= cetRepository.listEventTemplatesByCycleId(1);
+
+		Assert.notEmpty(events, "La lista no puede estar vacía");
+	}
+
     
 //    @Test
     void testCommunityMembership() {
@@ -157,12 +174,12 @@ class CommunityMgmtQueriesTests {
 		writeLargeJson(comunidad);
 	}
 
-	@Test
+//	@Test
 	void testFindRMarriageRSingle() {
 		Optional<RSingle> oRSingle = null;
-		oRSingle = singleRepository.findRSingleByPersonId(100);
+		oRSingle = singleRepository.findRSingleByPersonId(13);
 		Optional<RMarriage> oRMarriage = null;
-		oRMarriage = marriageRepository.findRMarriageByPersonId(100);
+		oRMarriage = marriageRepository.findRMarriageByPersonId(2);
 		assertNotNull(oRSingle);
 		assertNotNull(oRMarriage);
 	}

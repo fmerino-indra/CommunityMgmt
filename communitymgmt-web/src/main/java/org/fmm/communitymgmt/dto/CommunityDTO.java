@@ -3,7 +3,7 @@ package org.fmm.communitymgmt.dto;
 import java.util.List;
 
 import org.fmm.communitymgmt.common.model.Community;
-import org.fmm.communitymgmt.common.model.TCharge;
+import org.fmm.communitymgmt.common.model.common.TCharge;
 
 public class CommunityDTO {
 	private Community myCommunityData;

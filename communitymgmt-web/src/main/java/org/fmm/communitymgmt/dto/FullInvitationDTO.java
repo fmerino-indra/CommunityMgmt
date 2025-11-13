@@ -1,7 +1,7 @@
 package org.fmm.communitymgmt.dto;
 
 import org.fmm.communitymgmt.common.model.Invitation;
-import org.fmm.communitymgmt.common.util.InvitationState;
+import org.fmm.communitymgmt.common.util.enums.InvitationStateEnum;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -13,7 +13,7 @@ public class FullInvitationDTO {
 	private Long exp;
 	private Long iat;
 	@Enumerated(EnumType.STRING) // Guarda "M" o "F" como texto
-	private InvitationState state;
+	private InvitationStateEnum state;
 	private Boolean forMarriage;
 	private Integer invitationType;
 
@@ -91,10 +91,10 @@ public class FullInvitationDTO {
 	public void setIat(Long iat) {
 		this.iat = iat;
 	}
-	public InvitationState getState() {
+	public InvitationStateEnum getState() {
 		return state;
 	}
-	public void setState(InvitationState state) {
+	public void setState(InvitationStateEnum state) {
 		this.state = state;
 	}
 	public Boolean getForMarriage() {

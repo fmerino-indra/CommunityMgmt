@@ -1,6 +1,6 @@
 package org.fmm.communitymgmt.common.repository;
 
-import org.fmm.communitymgmt.common.model.TMembership;
+import org.fmm.communitymgmt.common.model.common.TMembership;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

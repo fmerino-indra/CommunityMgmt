@@ -1,12 +1,12 @@
-package org.fmm.communitymgmt.common.util;
+package org.fmm.communitymgmt.common.util.enums;
 
-public enum Gender {
+public enum GenderEnum {
 	M("Male"),
 	F("Female");
 	
 	private final String description;
 	
-	Gender(String description) {
+	GenderEnum(String description) {
 		this.description = description;
 	}
 	
