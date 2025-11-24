@@ -1,0 +1,25 @@
+{
+  "rules": [
+    {
+      "id": "string",
+      "name": "string",
+      "scope": {
+        "celebrations": ["WORD", "EUCHARIST", "COMMUNITY"],
+        "weekdays": ["TUESDAY", "SATURDAY"],
+        "dateRange": {
+          "start": "YYYY-MM-DD",
+          "end": "YYYY-MM-DD"
+        }
+      },
+      "condition": {
+        "type": "HOLIDAY|FIXED_DATE|WEEKDAY|CUSTOM",
+        "value": {},
+        "negate": false
+      },
+      "effect": {
+        "type": "CANCEL|MOVE|CUSTOM",
+        "params": {}
+      }
+    }
+  ]
+}

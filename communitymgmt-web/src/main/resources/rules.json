@@ -1,0 +1,79 @@
+{
+  "rules": [
+    {
+      "id": "navidad-sin-palabra",
+      "block": "PALABRA",
+      "conditions": [
+        { "type": "DATE_RANGE_MMDD", "from": "12-24", "to": "12-31" }
+      ],
+      "reason": "Semana de Navidad: no se celebra la Palabra."
+    },
+    {
+      "id": "navidad-eucaristia-excepcion",
+      "block": "EUCARISTIA",
+      "conditions": [
+        { "type": "DATE_EQUALS_MMDD", "value": "12-25" },
+        { "type": "DAY_OF_WEEK", "value": "SATURDAY" }
+      ],
+      "reason": "Navidad en sábado: no hay eucaristía comunitaria."
+    },
+    {
+      "id": "convivencias-navidad-suspendidas",
+      "block": "CONVIVENCIA",
+      "conditions": [
+        { "type": "DATE_RANGE_MMDD", "from": "12-24", "to": "12-31" }
+      ],
+      "reason": "Convivencias suspendidas en Navidad."
+    },
+    {
+      "id": "semana-santa-suspension-total",
+      "block": "*",
+      "conditions": [
+        { "type": "IS_HOLY_WEEK", "value": true }
+      ],
+      "reason": "Semana Santa: suspender celebraciones hasta semana posterior a In Albis."
+    },
+    {
+      "id": "domingo-ramos-conjunto",
+      "block": "EUCARISTIA",
+      "conditions": [
+        { "type": "IS_PALM_SUNDAY", "value": true }
+      ],
+      "reason": "Domingo de Ramos: eucaristía conjunta (no eucaristía comunitaria habitual)."
+    },
+    {
+      "id": "verano-sin-convivencias",
+      "block": "CONVIVENCIA",
+      "conditions": [
+        { "type": "MONTH_IN", "values": [7, 8] }
+      ],
+      "reason": "Convivencias suspendidas en julio y agosto."
+    },
+    {
+      "id": "verano-palabra-opcional",
+      "block": "PALABRA",
+      "conditions": [
+        { "type": "MONTH_IN", "values": [7, 8] }
+      ],
+      "reason": "En verano la Palabra puede celebrarse con otras comunidades (regla informativa / override posible).",
+      "meta": { "allowMergeCommunities": true }
+    },
+    {
+      "id": "festivos-laborales-cancelan-palabra",
+      "block": "PALABRA",
+      "conditions": [
+        { "type": "IS_HOLIDAY", "value": true },
+        { "type": "COMMUNITY_WEEKDAY_MATCH", "value": true }
+      ],
+      "reason": "Fiesta laboral que coincide con el día de Palabra de la comunidad."
+    },
+    {
+      "id": "one-off-override-example",
+      "block": "*",
+      "conditions": [
+        { "type": "CUSTOM_DATE", "value": "2026-04-12" }
+      ],
+      "reason": "Ejemplo: día bloqueado manualmente (override)."
+    }
+  ]
+}

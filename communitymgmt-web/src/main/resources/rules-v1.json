@@ -1,0 +1,101 @@
+{
+  "rules": [
+      {
+      "id": "rule_christmas_word",
+      "name": "Palabra se cancela en Navidad",
+      "scope": {
+        "celebrations": ["WORD"]
+      },
+      "condition": {
+        "type": "FIXED_DATE",
+        "value": { "month": 12, "day": 25 }
+      },
+      "effect": {
+        "type": "CANCEL"
+      }
+    },
+    {
+      "id": "rule_no_eucharist_if_christmas_saturday",
+      "name": "No hay Eucaristía si Navidad cae en sábado",
+      "scope": {
+        "celebrations": ["EUCHARIST"],
+        "weekdays": ["SATURDAY"]
+      },
+      "condition": {
+        "type": "FIXED_DATE",
+        "value": { "month": 12, "day": 25 }
+      },
+      "effect": {
+        "type": "CANCEL"
+      }
+    },
+    {
+      "id": "rule_word_cancel_on_national_holiday",
+      "name": "Se cancela la Palabra si es festivo laboral",
+      "scope": {
+        "celebrations": ["WORD"]
+      },
+      "condition": {
+        "type": "HOLIDAY",
+        "value": { "holidayType": "NATIONAL" }
+      },
+      "effect": {
+        "type": "CANCEL"
+      }
+    },
+    {
+      "id": "rule_holy_week_pause",
+      "name": "Pausa de celebraciones en Semana Santa",
+      "scope": {
+        "celebrations": ["WORD", "EUCHARIST", "COMMUNITY"],
+        "dateRange": {
+          "start": "2025-04-13",
+          "end": "2025-04-27"
+        }
+      },
+      "condition": {
+        "type": "TRUE"
+      },
+      "effect": {
+        "type": "CANCEL"
+      }
+    },
+    {
+      "id": "rule_summer_no_community",
+      "name": "No hay convivencia en julio y agosto",
+      "scope": {
+        "celebrations": ["COMMUNITY"],
+        "dateRange": {
+          "start": "2025-07-01",
+          "end": "2025-08-31"
+        }
+      },
+      "condition": {
+        "type": "TRUE"
+      },
+      "effect": {
+        "type": "CANCEL"
+      }
+    },
+    {
+      "id": "rule_summer_eucharist_time",
+      "name": "La Eucaristía cambia de horario en verano",
+      "scope": {
+        "celebrations": ["EUCHARIST"],
+        "dateRange": {
+          "start": "2025-07-01",
+          "end": "2025-08-31"
+        }
+      },
+      "condition": {
+        "type": "TRUE"
+      },
+      "effect": {
+        "type": "MOVE",
+        "params": {
+          "newTime": "20:00"
+        }
+      }
+    }
+
+]}
