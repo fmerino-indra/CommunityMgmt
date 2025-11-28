@@ -1,27 +1,59 @@
 package org.fmm.communitymgmt.calendar.rules;
 
+import java.time.LocalDate;
 import java.util.List;
 
-import org.fmm.communitymgmt.calendar.rules.conditions.Condition;
+import org.fmm.communitymgmt.calendar.rules.effect.RuleEffect;
 import org.fmm.communitymgmt.common.util.enums.TripodEnum;
 
 public class Rule {
-    public final String id;
-    public final String block; // "PALABRA", "EUCARISTIA", "CONVIVENCIA" or "*"
-    public final List<Condition> conditions;
-    public final String reason;
-    public final Object meta;
 
-    public Rule(String id, String block, List<Condition> conditions, String reason, Object meta) {
+    private String id;
+    private String name;
+    private RuleScope scope;
+    private List<RuleCondition> conditions;
+    private RuleEffect effect;
+
+    public Rule(String id,
+                String name,
+                RuleScope scope,
+                List<RuleCondition> conditions,
+                RuleEffect effect) {
         this.id = id;
-        this.block = block;
+        this.name = name;
+        this.scope = scope;
         this.conditions = conditions;
-        this.reason = reason;
-        this.meta = meta;
+        this.effect = effect;
     }
 
-    public boolean applies(TripodEnum type, CalendarContext ctx) {
-        if (!"*".equals(block) && !block.equals(type.name())) return false;
-        return conditions.stream().allMatch(c -> c.evaluate(ctx));
+    public boolean matchesScope(LocalDate date, TripodEnum type) {
+        return scope == null || scope.isInScope(type);
     }
+
+    public boolean appliesTo(TripodEnum type) {
+    	return matchesScope(null, type);
+    }
+    
+    public boolean evaluate(LocalDate date, RuleContext ctx) {
+        for (RuleCondition c : conditions) {
+            if (!c.evaluate(date, ctx)) return false;
+        }
+        return true;
+    }
+    
+    public boolean matches(LocalDate date) {
+    	return conditions.stream().allMatch(c -> c.matches(date));
+    }
+
+    public RuleEffect getEffect() {
+        return effect;
+    }
+
+	public String getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
 }

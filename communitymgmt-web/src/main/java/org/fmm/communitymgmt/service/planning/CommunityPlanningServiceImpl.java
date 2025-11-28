@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import org.fmm.communitymgmt.calendar.rules.RulesEngine;
+import org.fmm.communitymgmt.calendar.rules.effect.CancelEffect;
+import org.fmm.communitymgmt.calendar.rules.effect.RuleEffect;
 import org.fmm.communitymgmt.common.model.Community;
 import org.fmm.communitymgmt.common.model.CommunitySettings;
 import org.fmm.communitymgmt.common.model.calendar.Event;
@@ -18,8 +21,6 @@ import org.fmm.communitymgmt.common.model.common.TTripod;
 import org.fmm.communitymgmt.common.model.templates.CelebrationEventTemplate;
 import org.fmm.communitymgmt.common.repository.CommunitySettingsRepository;
 import org.fmm.communitymgmt.common.repository.calendar.EventRepository;
-import org.fmm.communitymgmt.common.repository.common.TEventTypeRepository;
-import org.fmm.communitymgmt.common.repository.templates.CelebrationCycleTemplateRepository;
 import org.fmm.communitymgmt.common.repository.templates.CelebrationEventTemplateRepository;
 import org.fmm.communitymgmt.common.util.enums.EventTypeEnum;
 import org.fmm.communitymgmt.common.util.enums.TripodEnum;
@@ -35,15 +36,18 @@ public class CommunityPlanningServiceImpl implements CommunityPlanningService {
     
     @Autowired
     private EventRepository eventRepository;
+/*
     @Autowired
     private TEventTypeRepository tEventTypeRepository;
     
     @Autowired
     private CelebrationCycleTemplateRepository cctRepository;
-    
+*/  
     @Autowired
     private CelebrationEventTemplateRepository cetRepository;
     
+    @Autowired
+    private RulesEngine rulesEngine;
     
     @PostConstruct
     private void init() {
@@ -83,7 +87,13 @@ public class CommunityPlanningServiceImpl implements CommunityPlanningService {
 		List<LocalDate> convivenceDates = getNDayOfWeekByMonth(fromLDT, toLDT, DayOfWeek.SUNDAY, nDay);
 		//tEventTypeRepository.findAll();
 		Event convivence = null;
+		RuleEffect effect = null;
 		for (LocalDate date: convivenceDates) {
+			
+			effect = rulesEngine.evaluate(TripodEnum.COMMUNITY, date);
+			if (effect instanceof CancelEffect)
+				continue;
+
 			convivence = new Event();
 			convivence.setEventDate(date);
 			convivence.setEventTime(time);

@@ -1,0 +1,38 @@
+{
+  "rules": [
+    {
+      "kind": "liturgical.relativeTo",
+      "baseRule": {
+        "kind": "liturgical.fixed",
+        "month": 11,
+        "day": 30
+      },
+      "adjust": {
+        "unit": "weekday",
+        "dayOfWeek": "SUNDAY",
+        "direction": "onOrNext"
+      }
+    },
+    {
+      "kind": "liturgical.relativeTo",
+      "baseRule": {
+        "kind": "liturgical.relativeTo",
+        "baseRule": {
+          "kind": "liturgical.fixed",
+          "month": 11,
+          "day": 30
+        },
+        "adjust": {
+          "unit": "weekday",
+          "dayOfWeek": "SUNDAY",
+          "direction": "onOrNext"
+        }
+      },
+      "adjust": {
+        "unit": "weekday",
+        "dayOfWeek": "SUNDAY",
+        "direction": "previous"
+      }
+    }
+  ]
+}

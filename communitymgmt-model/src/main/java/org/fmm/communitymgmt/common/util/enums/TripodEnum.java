@@ -5,6 +5,14 @@ public enum TripodEnum {
     WORD(2,"Word"), // Word Service
     COMMUNITY(3,"Community"); // Convivence
     
+	public static TripodEnum from(String name) {
+		switch (name) {
+			case "LITURGY": return LITURGY;
+			case "WORD": return WORD;
+			case "COMMUNITY": return COMMUNITY;
+			default: return WORD;
+		}
+	}
     TripodEnum(int id, String name) {
         this.id = id;
         this.name = name;

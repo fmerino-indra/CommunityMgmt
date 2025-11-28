@@ -1,0 +1,102 @@
+{
+  "rules": [
+    {
+      "id": "christmas_word",
+      "name": "No hay Palabra las 2 semanas de navidad, que son, la semana propia y la siguiente",
+      "scope": {
+        "celebrations": ["WORD", "COMMUNITY"]
+      },
+      "conditions": [
+        {
+          "type": "WEEK_OF",
+          "value": {
+            "date": "2025-12-25",
+            "offset": [0,1]
+          } 
+        }
+      ],
+      "effect": { "type": "CANCEL" }
+    },
+
+    {
+      "id": "summer_no_community",
+      "name": "Sin convivencias en julio y agosto",
+      "scope": {
+        "celebrations": ["COMMUNITY"]
+      },
+      "conditions": [
+        {
+          "type": "DATE_RANGE",
+          "value": {
+            "start": "2025-07-01",
+            "end": "2025-08-31"
+          }
+        }
+      ],
+      "effect": { "type": "CANCEL" }
+    },
+
+    {
+      "id": "christmas_eucharist_saturday",
+      "name": "No hay Eucaristía si el sábado es: 24/12, 25/12, 31/12, 01/01",
+      "scope": {
+        "celebrations": ["LITURGY"]
+      },
+      "conditions": [
+        { "type": "FIXED_DATE", "value": { "month": 12, "day": 24 } },
+        { "type": "FIXED_DATE", "value": { "month": 12, "day": 25 } },
+        { "type": "FIXED_DATE", "value": { "month": 12, "day": 31 } },
+        { "type": "FIXED_DATE", "value": { "month": 1, "day": 1 } },
+        { "type": "WEEKDAY", "value": "SATURDAY" }
+      ],
+      "effect": { "type": "CANCEL" }
+    },
+
+    {
+      "id": "word_cancel_on_national_holiday",
+      "name": "Se cancela la Palabra si es festivo nacional",
+      "scope": { "celebrations": ["WORD"] },
+      "conditions": [
+        { "type": "HOLIDAY", "value": { "holidayType": "NATIONAL" } }
+      ],
+      "effect": { "type": "CANCEL" }
+    },
+
+    {
+      "id": "holy_week_pause",
+      "name": "No hay celebraciones en Semana Santa",
+      "scope": {
+        "celebrations": ["WORD", "LITURGY", "COMMUNITY"]
+      },
+      "conditions": [
+        {
+          "type": "DATE_RANGE",
+          "value": {
+            "start": "2025-04-13",
+            "end": "2025-04-27"
+          }
+        }
+      ],
+      "effect": { "type": "CANCEL" }
+    },
+
+    {
+      "id": "eucharist_summer_time",
+      "name": "La Eucaristía cambia de hora en verano",
+      "scope": { "celebrations": ["LITURGY"] },
+      "conditions": [
+        {
+          "type": "DATE_RANGE",
+          "value": {
+            "start": "2025-07-01",
+            "end": "2025-08-31"
+          }
+        }
+      ],
+      "effect": {
+        "type": "MOVE",
+        "params": { "newTime": "20:00" }
+      }
+    }
+  ]
+}
