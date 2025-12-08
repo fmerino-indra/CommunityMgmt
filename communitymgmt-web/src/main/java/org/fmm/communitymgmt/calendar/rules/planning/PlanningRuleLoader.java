@@ -1,4 +1,4 @@
-package org.fmm.communitymgmt.calendar.rules;
+package org.fmm.communitymgmt.calendar.rules.planning;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,28 +7,30 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fmm.communitymgmt.calendar.rules.RuleCondition;
+import org.fmm.communitymgmt.calendar.rules.RuleScope;
 import org.fmm.communitymgmt.calendar.rules.conditions.DateRangeCondition;
 import org.fmm.communitymgmt.calendar.rules.conditions.FixedDateCondition;
 import org.fmm.communitymgmt.calendar.rules.conditions.HolidayCondition;
 import org.fmm.communitymgmt.calendar.rules.conditions.WeekOfCondition;
 import org.fmm.communitymgmt.calendar.rules.conditions.WeekdayCondition;
-import org.fmm.communitymgmt.calendar.rules.effect.CancelEffect;
-import org.fmm.communitymgmt.calendar.rules.effect.MoveEffect;
-import org.fmm.communitymgmt.calendar.rules.effect.NoneEffect;
-import org.fmm.communitymgmt.calendar.rules.effect.RuleEffect;
+import org.fmm.communitymgmt.calendar.rules.planning.effect.CancelEffect;
+import org.fmm.communitymgmt.calendar.rules.planning.effect.MoveEffect;
+import org.fmm.communitymgmt.calendar.rules.planning.effect.NoneEffect;
+import org.fmm.communitymgmt.calendar.rules.planning.effect.RuleEffect;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
-public class RuleLoader {
+public class PlanningRuleLoader {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public List<Rule> load(Path path) throws IOException {
+    public List<PlanningRule> load(Path path) throws IOException {
         JsonNode root = mapper.readTree(Files.readAllBytes(path));
-        List<Rule> rules = new ArrayList<>();
+        List<PlanningRule> rules = new ArrayList<>();
         
         for (JsonNode node : root.get("rules")) {
             rules.add(parseRule(node));
@@ -36,7 +38,7 @@ public class RuleLoader {
         return rules;
     }
 
-    private Rule parseRule(JsonNode node) {
+    private PlanningRule parseRule(JsonNode node) {
         String id = node.get("id").asText();
         String name = node.get("name").asText();
 
@@ -44,7 +46,7 @@ public class RuleLoader {
         List<RuleCondition> conditions = parseConditions(node.get("conditions"));
         RuleEffect effect = parseEffect(node.get("effect"));
 
-        return new Rule(id, name, scope, conditions, effect);
+        return new PlanningRule(id, name, scope, conditions, effect);
     }
 
     private RuleScope parseScope(JsonNode node) {

@@ -1,4 +1,4 @@
-package org.fmm.communitymgmt.calendar.rules.effect;
+package org.fmm.communitymgmt.calendar.rules.planning.effect;
 
 public abstract class RuleEffect {
 

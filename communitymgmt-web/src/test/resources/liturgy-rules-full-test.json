@@ -1,0 +1,323 @@
+[
+    {
+        "id": "easter",
+        "name": "Domingo de Pascua",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "EASTER_COMPUTUS"
+            }
+        }
+    },
+    {
+        "id": "ascension",
+        "name": "Ascensión del Señor",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "BASE_ADJUST",
+                "base": "easter",
+                "adjust": [
+                    {
+                        "type": "ADD_DAYS",
+                        "value": 39
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "id": "pentecost",
+        "name": "Pentecostés",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "BASE_ADJUST",
+                "base": "easter",
+                "adjust": [
+                    {
+                        "type": "ADD_DAYS",
+                        "value": 49
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "id": "holy_thursday",
+        "name": "Jueves Santo",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "BASE_ADJUST",
+                "base": "easter",
+                "adjust": [
+                    {
+                        "type": "ADD_DAYS",
+                        "value": -3
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "id": "good_friday",
+        "name": "Viernes Santo",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "BASE_ADJUST",
+                "base": "easter",
+                "adjust": [
+                    {
+                        "type": "ADD_DAYS",
+                        "value": -2
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "id": "holy_saturday",
+        "name": "Sábado Santo",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "BASE_ADJUST",
+                "base": "easter",
+                "adjust": [
+                    {
+                        "type": "ADD_DAYS",
+                        "value": -1
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "id": "palm_sunday",
+        "name": "Domingo de Ramos",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "BASE_ADJUST",
+                "base": "easter",
+                "adjust": [
+                    {
+                        "type": "ADD_DAYS",
+                        "value": -7
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "id": "trinity",
+        "name": "Santísima Trinidad",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "BASE_ADJUST",
+                "base": "pentecost",
+                "adjust": [
+                    {
+                        "type": "ADD_DAYS",
+                        "value": 7
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "id": "corpus_christi",
+        "name": "Corpus Christi",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "BASE_ADJUST",
+                "base": "trinity",
+                "adjust": [
+                    {
+                        "type": "ADD_DAYS",
+                        "value": 4
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "id": "sacred_heart",
+        "name": "Sagrado Corazón",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "BASE_ADJUST",
+                "base": "easter",
+                "adjust": [
+                    {
+                        "type": "ADD_DAYS",
+                        "value": 68
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "id": "ash_wednesday",
+        "name": "Miércoles de Ceniza",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "BASE_ADJUST",
+                "base": "easter",
+                "adjust": [
+                    {
+                        "type": "ADD_DAYS",
+                        "value": -46
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "id": "first_sunday_advent",
+        "name": "Primer Domingo de Adviento",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "RELATIVE_TO_FIXED",
+                "month": 11,
+                "day": 30,
+                "adjust": {
+                    "type": "ON_OR_NEXT_WEEKDAY",
+                    "weekday": "SUNDAY"
+                }
+            }
+        }
+    },
+    {
+        "id": "christ_the_king",
+        "name": "Cristo Rey",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "BASE_ADJUST",
+                "base": "first_sunday_advent",
+                "adjust": [
+                    {
+                        "type": "PREVIOUS_WEEKDAY",
+                        "weekday": "SUNDAY"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "id": "christmas",
+        "name": "Navidad",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "FIXED",
+                "month": 12,
+                "day": 25
+            }
+        }
+    },
+    {
+        "id": "mary_mother_of_god",
+        "name": "María Madre de Dios",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "FIXED",
+                "month": 1,
+                "day": 1
+            }
+        }
+    },
+    {
+        "id": "epiphany",
+        "name": "Epifanía",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "FIXED",
+                "month": 1,
+                "day": 6
+            }
+        }
+    },
+    {
+        "id": "annunciation",
+        "name": "Anunciación del Señor",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "FIXED",
+                "month": 3,
+                "day": 25
+            }
+        }
+    },
+    {
+        "id": "nativity_saint_john",
+        "name": "Natividad de San Juan Bautista",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "FIXED",
+                "month": 6,
+                "day": 24
+            }
+        }
+    },
+    {
+        "id": "peter_paul",
+        "name": "San Pedro y San Pablo",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "FIXED",
+                "month": 6,
+                "day": 29
+            }
+        }
+    },
+    {
+        "id": "assumption",
+        "name": "Asunción de la Virgen",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "FIXED",
+                "month": 8,
+                "day": 15
+            }
+        }
+    },
+    {
+        "id": "all_saints",
+        "name": "Todos los Santos",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "FIXED",
+                "month": 11,
+                "day": 1
+            }
+        }
+    },
+    {
+        "id": "immaculate_conception",
+        "name": "Inmaculada Concepción",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "FIXED",
+                "month": 12,
+                "day": 8
+            }
+        }
+    }
+]

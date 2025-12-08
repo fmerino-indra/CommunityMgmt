@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.fmm.communitymgmt.calendar.rules.RulesEngine;
-import org.fmm.communitymgmt.calendar.rules.effect.CancelEffect;
-import org.fmm.communitymgmt.calendar.rules.effect.RuleEffect;
+import org.fmm.communitymgmt.calendar.rules.planning.PlanningRulesEngine;
+import org.fmm.communitymgmt.calendar.rules.planning.effect.CancelEffect;
+import org.fmm.communitymgmt.calendar.rules.planning.effect.RuleEffect;
 import org.fmm.communitymgmt.common.model.Community;
 import org.fmm.communitymgmt.common.model.CommunitySettings;
 import org.fmm.communitymgmt.common.model.calendar.Event;
@@ -47,7 +47,7 @@ public class CommunityPlanningServiceImpl implements CommunityPlanningService {
     private CelebrationEventTemplateRepository cetRepository;
     
     @Autowired
-    private RulesEngine rulesEngine;
+    private PlanningRulesEngine rulesEngine;
     
     @PostConstruct
     private void init() {

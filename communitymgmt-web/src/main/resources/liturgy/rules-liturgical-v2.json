@@ -1,0 +1,17 @@
+{
+  "rules": [
+    {
+        "id": "first_sunday_advent",
+        "name": "Primer Domingo de Adviento",
+        "kind": "LITURGY",
+        "payload": {
+            "computus": {
+                "type": "FIXED_COMPUTUS",
+                "month": 11,
+                "day": 30
+            }
+        }
+    }
+  
+  ]
+}

@@ -1,6 +1,7 @@
 {
   "rules": [
     {
+      "id": "1st_advent_sunday",
       "kind": "liturgical.relativeTo",
       "baseRule": {
         "kind": "liturgical.fixed",

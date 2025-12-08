@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 
-import org.fmm.communitymgmt.calendar.rules.RulesEngine;
-import org.fmm.communitymgmt.calendar.rules.effect.CancelEffect;
-import org.fmm.communitymgmt.calendar.rules.effect.RuleEffect;
+import org.fmm.communitymgmt.calendar.rules.planning.PlanningRulesEngine;
+import org.fmm.communitymgmt.calendar.rules.planning.effect.CancelEffect;
+import org.fmm.communitymgmt.calendar.rules.planning.effect.RuleEffect;
 import org.fmm.communitymgmt.common.util.enums.TripodEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 class RulesEngineTest {
 
     @Autowired
-    private RulesEngine engine;
+    private PlanningRulesEngine engine;
 
     @Test
     void testWordCancelledOnChristmasWeeks() {

@@ -14,7 +14,7 @@ public class WeekOfCondition implements RuleCondition {
     private final int weekOfMonth;
     
     public WeekOfCondition(String dateStr, List<Integer> offset) {
-    	this.weekOfMonth = RuleUtil.weekOfDate(LocalDate.parse(dateStr));
+    	this.weekOfMonth = RuleUtil.weekOfMonthOfDate(LocalDate.parse(dateStr));
     	this.offset = offset;
 	}
     @Override
@@ -26,7 +26,7 @@ public class WeekOfCondition implements RuleCondition {
 	public boolean matches(LocalDate date) {
     	boolean response = false;
     	for (int i = 0; i<offset.size(); i++) {
-    		response = response || this.weekOfMonth+offset.get(i) == RuleUtil.weekOfDate(date); 
+    		response = response || this.weekOfMonth+offset.get(i) == RuleUtil.weekOfMonthOfDate(date); 
     	}
     	return response;
 	}
