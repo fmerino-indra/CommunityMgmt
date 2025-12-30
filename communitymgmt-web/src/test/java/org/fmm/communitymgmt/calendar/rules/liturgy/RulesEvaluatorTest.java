@@ -31,8 +31,8 @@ class RulesEvaluatorTest {
 
         LiturgyRuleLoader loader = new LiturgyRuleLoader();
         
-		Resource resource = resourceLoader.getResource("classpath:liturgy/liturgy-rules-v4.json");
-		assertTrue(resource.exists(), "liturgy-rules-v4.json must exist in working directory for this test");
+		Resource resource = resourceLoader.getResource("classpath:liturgy/liturgy-rules-v5.json");
+		assertTrue(resource.exists(), "liturgy-rules-v5.json must exist in working directory for this test");
 		Path path = resource.getFile().toPath();
         
         
@@ -44,7 +44,7 @@ class RulesEvaluatorTest {
 
         LiturgyRuleEvaluator ev = new LiturgyRuleEvaluator(registry);
         int litYear = 2026;
-        List<LiturgicalFeast> feasts = ev.evaluate(litYear);
+        List<LiturgicalFeast> feasts = ev.evaluate(litYear, "es", "ES");
 
         // find by id helper
         java.util.function.Function<String, LiturgicalFeast> byId = (id) -> feasts.stream().filter(x->x.getId().equals(id)).findFirst().orElse(null);

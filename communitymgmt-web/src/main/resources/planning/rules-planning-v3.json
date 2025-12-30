@@ -17,6 +17,22 @@
       ],
       "effect": { "type": "CANCEL" }
     },
+    {
+      "id": "christmas_eucharist_saturday",
+      "name": "No hay Eucaristía si el sábado es: 24/12, 25/12, 31/12, 01/01",
+      "scope": {
+        "celebrations": ["LITURGY"]
+      },
+      "conditions": [
+        { "type": "FIXED_DATE", "value": { "month": 12, "day": 24 } },
+        { "type": "FIXED_DATE", "value": { "month": 12, "day": 25 } },
+        { "type": "FIXED_DATE", "value": { "month": 12, "day": 31 } },
+        { "type": "FIXED_DATE", "value": { "month": 1, "day": 1 } },
+        { "type": "WEEKDAY", "value": "SATURDAY" }
+      ],
+      "effect": { "type": "CANCEL" }
+    },
+
 
     {
       "id": "summer_no_community",
@@ -32,22 +48,6 @@
             "end": "2025-08-31"
           }
         }
-      ],
-      "effect": { "type": "CANCEL" }
-    },
-
-    {
-      "id": "christmas_eucharist_saturday",
-      "name": "No hay Eucaristía si el sábado es: 24/12, 25/12, 31/12, 01/01",
-      "scope": {
-        "celebrations": ["LITURGY"]
-      },
-      "conditions": [
-        { "type": "FIXED_DATE", "value": { "month": 12, "day": 24 } },
-        { "type": "FIXED_DATE", "value": { "month": 12, "day": 25 } },
-        { "type": "FIXED_DATE", "value": { "month": 12, "day": 31 } },
-        { "type": "FIXED_DATE", "value": { "month": 1, "day": 1 } },
-        { "type": "WEEKDAY", "value": "SATURDAY" }
       ],
       "effect": { "type": "CANCEL" }
     },

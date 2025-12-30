@@ -60,7 +60,7 @@ public class ValidateCommunityBelongingInterceptor implements HandlerInterceptor
 		
 		Map<String, String> uriTemplateVars = null;
 
-        //@TODO Recoger los valores enviados de los Header y del Body como formulario
+        //TODO Recoger los valores enviados de los Header y del Body como formulario
         //String body=null; // De momento no está
         
         boolean match = false;

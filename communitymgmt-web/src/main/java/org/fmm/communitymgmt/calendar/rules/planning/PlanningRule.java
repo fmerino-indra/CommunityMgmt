@@ -24,4 +24,9 @@ public class PlanningRule extends AbstractRule {
     public RuleEffect getEffect() {
         return effect;
     }
+    
+    @Override
+    public String toString() {
+    	return super.toString();
+    }
 }

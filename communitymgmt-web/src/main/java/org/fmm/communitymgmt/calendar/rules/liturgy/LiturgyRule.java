@@ -1,27 +1,32 @@
 package org.fmm.communitymgmt.calendar.rules.liturgy;
 
-import java.util.List;
-
-import org.fmm.communitymgmt.calendar.rules.AbstractRule;
-import org.fmm.communitymgmt.calendar.rules.RuleCondition;
 import org.fmm.communitymgmt.calendar.rules.RuleKindEnum;
-import org.fmm.communitymgmt.calendar.rules.RuleScope;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.AbstractComputus;
 
-public class LiturgyRule extends AbstractRule {
+public class LiturgyRule {
 
+	protected String id;
+	protected String name;
+	private RuleKindEnum kind;
+	protected LiturgyRuleScope scope;
+	
 	private AbstractComputus computus;
 	private int liturgicalYearShift=0;
+	protected String override;
 	
     public LiturgyRule(String id,
                 String name,
         		int liturgicalYearShift,
-                RuleScope scope,
-                List<RuleCondition> conditions,
-                AbstractComputus computus) {
-        super(id, name, RuleKindEnum.LITURGY, scope, conditions);
+        		LiturgyRuleScope scope,
+                AbstractComputus computus,
+                String override) {
+        this.id = id;
+        this.name = name;
+        this.kind = RuleKindEnum.LITURGY;
+        this.scope = scope;
         this.computus = computus;
 		this.liturgicalYearShift=liturgicalYearShift;
+		this.override=override;
     }
 
 	public AbstractComputus getComputus() {
@@ -35,5 +40,25 @@ public class LiturgyRule extends AbstractRule {
 
 	public int getLiturgicalYearShift() {
 		return liturgicalYearShift;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public RuleKindEnum getKind() {
+		return kind;
+	}
+
+	public LiturgyRuleScope getScope() {
+		return scope;
+	}
+
+	public String getOverride() {
+		return override;
 	}
 }

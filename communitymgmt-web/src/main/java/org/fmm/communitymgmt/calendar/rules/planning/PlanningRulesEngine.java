@@ -31,11 +31,18 @@ public class PlanningRulesEngine extends RulesEngine {
     }
 
      */
-    public RuleEffect evaluate(TripodEnum celebrationType, LocalDate date) {
+    public RuleEffect evaluateOld(TripodEnum celebrationType, LocalDate date) {
     	return rules.stream()
     			.filter(r -> r.appliesTo(celebrationType))
     			.filter(r -> r.matches(date))
     			.map(PlanningRule::getEffect)
+    			.findFirst()
+    			.orElse(null);
+    }
+    public PlanningRule evaluate(TripodEnum celebrationType, LocalDate date) {
+    	return rules.stream()
+    			.filter(r -> r.appliesTo(celebrationType))
+    			.filter(r -> r.matches(date))
     			.findFirst()
     			.orElse(null);
     }

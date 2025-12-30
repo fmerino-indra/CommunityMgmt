@@ -6,10 +6,10 @@ spring:
       hibernate:
          ddl-auto: NONE
       properties:
-        hibernate.show-sql: true
+        hibernate.show-sql: false
         hibernate.format_sql: true
         hibernate.use_sql_comments: true
-        hibernate.type.descriptor.sql.BasicBinder: TRACE
+        hibernate.type.descriptor.sql.BasicBinder: INFO
         hibernate.default_schema: communitymgmt
    datasource:
       platform: postgres
@@ -32,14 +32,17 @@ spring:
 logging:
   level:
     root: INFO
-    org.hibernate.SQL: DEBUG
+    org.hibernate.SQL: INFO
+
 #    org.hibernate.type: TRACE  # Muestra los valores de los parámetros
 #    org.hibernate.type.descriptor.sql: TRACE  # Muestra los valores de los parámetros
+
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Muestra los valores de los parámetros
     org.fmm.communitymgmt: DEBUG
-    org.springframework.web: DEBUG
-    org.springframework.security.oauth2: TRACE
-    org.springframework.security: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security.oauth2: INFO
+    org.springframework.security: INFO
+    
 #    org.springframework.boot.autoconfigure: DEBUG
 #    org.springframework.jdbc.datasource: DEBUG
 #    org.springframework.orm.jpa: DEBUG

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 
+import org.fmm.communitymgmt.calendar.rules.planning.PlanningRule;
 import org.fmm.communitymgmt.calendar.rules.planning.PlanningRulesEngine;
 import org.fmm.communitymgmt.calendar.rules.planning.effect.CancelEffect;
 import org.fmm.communitymgmt.calendar.rules.planning.effect.RuleEffect;
@@ -28,8 +29,11 @@ class RulesEngineTest {
     void testWordCancelledOnChristmasWeeks() {
         LocalDate date = LocalDate.of(2025, 12, 26);
 
-        RuleEffect effect = engine.evaluate(TripodEnum.WORD, date);
-
+        RuleEffect effectOld = engine.evaluateOld(TripodEnum.WORD, date);
+        
+        PlanningRule rule = engine.evaluate(TripodEnum.WORD, date);
+        RuleEffect effect = rule.getEffect();
+        
         assertNotNull(effect, "Debe haber un efecto");
         assertTrue(effect instanceof CancelEffect, "La Palabra debe cancelarse en la semana de Navidad");
     }
@@ -38,7 +42,10 @@ class RulesEngineTest {
     void testWordCancelledOnChristmas() {
         LocalDate date = LocalDate.of(2025, 12, 25);
 
-        RuleEffect effect = engine.evaluate(TripodEnum.WORD, date);
+        RuleEffect effectOld = engine.evaluateOld(TripodEnum.WORD, date);
+        
+        PlanningRule rule = engine.evaluate(TripodEnum.WORD, date);
+        RuleEffect effect = rule.getEffect();
 
         assertNotNull(effect, "Debe haber un efecto");
         assertTrue(effect instanceof CancelEffect, "La Palabra debe cancelarse en Navidad");
@@ -49,7 +56,10 @@ class RulesEngineTest {
         // 2021-12-25 fue sábado
         LocalDate date = LocalDate.of(2021, 12, 25);
 
-        RuleEffect effect = engine.evaluate(TripodEnum.LITURGY, date);
+        RuleEffect effectOld = engine.evaluateOld(TripodEnum.LITURGY, date);
+        
+        PlanningRule rule = engine.evaluate(TripodEnum.WORD, date);
+        RuleEffect effect = rule.getEffect();
 
         assertNotNull(effect, "Debe haber un efecto");
         assertTrue(effect instanceof CancelEffect, "La Eucaristía debe cancelarse si Navidad cae en sábado");
@@ -60,7 +70,10 @@ class RulesEngineTest {
         // 2025-12-25 cae jueves
         LocalDate date = LocalDate.of(2025, 12, 25);
 
-        RuleEffect effect = engine.evaluate(TripodEnum.LITURGY, date);
+        RuleEffect effectOld = engine.evaluateOld(TripodEnum.LITURGY, date);
+        
+        PlanningRule rule = engine.evaluate(TripodEnum.WORD, date);
+        RuleEffect effect = rule.getEffect();
 
         assertNull(effect, "La Eucaristía NO debe cancelarse si Navidad no es sábado");
     }
@@ -69,7 +82,10 @@ class RulesEngineTest {
     void testConvivenceCancelledDuringSummer() {
         LocalDate date = LocalDate.of(2025, 7, 10);
 
-        RuleEffect effect = engine.evaluate(TripodEnum.COMMUNITY, date);
+        RuleEffect effectOld = engine.evaluateOld(TripodEnum.COMMUNITY, date);
+        
+        PlanningRule rule = engine.evaluate(TripodEnum.WORD, date);
+        RuleEffect effect = rule.getEffect();
 
         assertNotNull(effect);
         assertTrue(effect instanceof CancelEffect);
@@ -79,7 +95,10 @@ class RulesEngineTest {
     void testConvivenceOutsideSummerNotCancelled() {
         LocalDate date = LocalDate.of(2025, 9, 5);
 
-        RuleEffect effect = engine.evaluate(TripodEnum.COMMUNITY, date);
+        RuleEffect effectOld = engine.evaluateOld(TripodEnum.COMMUNITY, date);
+        
+        PlanningRule rule = engine.evaluate(TripodEnum.WORD, date);
+        RuleEffect effect = rule.getEffect();
 
         assertNull(effect, "Fuera de verano no debe cancelarse la Convivencia");
     }

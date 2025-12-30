@@ -1,11 +1,15 @@
-package org.fmm.communitymgmt.common.util.enums;
+package org.fmm.communitymgmt.calendar.rules.liturgy.enums;
 
-public enum TripodEnum {
-    LITURGY(1,"Liturgy"), // Eucharist
-    WORD(2,"Word"), // Word Service
-    COMMUNITY(3,"Community"); // Convivence
+public enum SeasonEnum {
+    PASCHAL_TRIDUUM(1,"Paschal Triduum"),
+    EASTER_TIME(2,"Easter_Time"),
+    LENT(3,"Lent"),
+    CHRISTMAS_TIME(3, "Christmas"),
+    ADVENT(4,"Advent"),
+    ORDINARY_TIME(5,"Ordinary Time");
     
-	public static TripodEnum from(String name) {
+    /*
+	public static FeastRankEnum from(String name) {
 		switch (name) {
 			case "LITURGY": return LITURGY;
 			case "WORD": return WORD;
@@ -13,7 +17,8 @@ public enum TripodEnum {
 			default: return WORD;
 		}
 	}
-    TripodEnum(int id, String name) {
+	*/
+    SeasonEnum(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -32,9 +37,5 @@ public enum TripodEnum {
     }
     public void setName(String name) {
         this.name = name;
-    }
-    @Override
-    public String toString() {
-    	return String.format("%s(%d)", name, id);
     }
 }

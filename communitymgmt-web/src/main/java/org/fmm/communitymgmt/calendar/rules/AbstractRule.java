@@ -52,4 +52,9 @@ public class AbstractRule {
 	public RuleKindEnum getKind() {
 		return kind;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s|%s\n\t%s\n", id, name, scope);
+	}
 }

@@ -6,9 +6,6 @@ import java.time.temporal.TemporalAdjusters;
 public class NextNthWeekdayAdjust extends AbstractNthWeekday {
 	public NextNthWeekdayAdjust(DayOfWeek weekday, int nth) {
 		super(AdjustEnum.NEXT_NTH_WEEKDAY, weekday, nth, TemporalAdjusters.next(weekday));
-//		this.weekday = weekday;
-//		this.nth = nth;
-//		this.temporalAdjuster = TemporalAdjusters.next(weekday);
 	}
 	
     @Override

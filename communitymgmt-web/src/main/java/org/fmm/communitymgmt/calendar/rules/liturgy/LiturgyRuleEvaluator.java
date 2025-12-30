@@ -12,6 +12,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,11 +24,11 @@ public class LiturgyRuleEvaluator {
 		this.registry = registry; 
 	}
 
-	public List<LiturgicalFeast> evaluate(int liturgicalYear) throws Exception {
+	public List<LiturgicalFeast> evaluate(int liturgicalYear, String language, String bishopsConferenceCountry) throws Exception {
 		// compute liturgical year start: first Sunday of Advent of previous calendar
 		// year
 		LocalDate advStart = computeFirstSundayOfAdvent(liturgicalYear - 1);
-		LiturgyRuleContext ctx = new LiturgyRuleContext(liturgicalYear, advStart);
+		LiturgyRuleContext ctx = new LiturgyRuleContext(liturgicalYear, advStart,Locale.of(language, bishopsConferenceCountry));
 
 		// Build dependency graph based on referencedRuleIds
 		Map<String, Set<String>> deps = new HashMap<>(); // node -> set of bases it depends on
@@ -43,8 +44,14 @@ public class LiturgyRuleEvaluator {
 		for (String ruleId : order) {
 			System.out.println();
 			LiturgyRule rule = registry.get(ruleId);
+			if (!ruleApplies(rule, ctx))
+				continue;
+			System.out.printf("Regla: %s -> %s (%s)", rule.id, rule.name, rule.scope);
 			LocalDate d = rule.getComputus().compute(liturgicalYear+rule.getLiturgicalYearShift(), ctx, registry);
-			registry.setComputedDate(ruleId, d);
+			if (rule.override != null)
+				registry.setComputedDate(rule.override, d);
+			else
+				registry.setComputedDate(ruleId, d);
 			out.add(new LiturgicalFeast(rule.getId(), rule.getName(), d, rule.getId()));
 		}
 
@@ -54,6 +61,13 @@ public class LiturgyRuleEvaluator {
 //		out.sort(Comparator.comparing((LiturgicalFeast f) -> f.getDate()));
 //		out.sort(Comparator.comparing(LiturgicalFeast::getDate));
 		return out;
+	}
+
+	private boolean ruleApplies(LiturgyRule rule, LiturgyRuleContext ctx) {
+		String value = null;
+		if (ctx.region != null)
+			value = ctx.region.getCountry();
+		return rule.getScope() == null || rule.getScope().isInScope(value);
 	}
 
 	private static List<String> topoSort(Map<String, Set<String>> deps) {

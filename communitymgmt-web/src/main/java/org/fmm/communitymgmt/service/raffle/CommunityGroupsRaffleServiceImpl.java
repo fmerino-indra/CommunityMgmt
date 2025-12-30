@@ -94,7 +94,12 @@ public class CommunityGroupsRaffleServiceImpl implements CommunityGroupsRaffleSe
         
         return raffle;
     }
-    
+    /**
+     * Prepare the raffle with candidates (similar to <code>prepareRaffle</code> method)
+     * @param fromLDT
+     * @param toLDT
+     * @return
+     */
     public RaffleDTO raffleSimpleGroup(LocalDate fromLDT, LocalDate toLDT) {
         List<Service> servicios = null;
         List<Person> persons = null; 
@@ -104,9 +109,11 @@ public class CommunityGroupsRaffleServiceImpl implements CommunityGroupsRaffleSe
     	raffle = new RaffleDTO();
     	
     	raffle.setAllCandidates(null);
-    	
+    	// TODO Falta cargar los "servicios" que en este proyecto serán las celebraciones para las que hay que crear un grupo de preparación
         // Esto ok, hay que cargar los candidatos
         persons=personRepository.listAllPerson();
+        
+        // TODO El método loadCandidatesForRaffle, elimina las personas que no pueden en ese período por vacaciones, por ejemplo.
         raffle.setAllCandidates(persons);
         
         raffle = loadCandidatesForRaffle(raffle);

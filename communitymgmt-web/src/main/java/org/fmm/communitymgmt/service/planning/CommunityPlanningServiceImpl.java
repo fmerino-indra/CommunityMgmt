@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import org.fmm.communitymgmt.calendar.rules.planning.PlanningRule;
 import org.fmm.communitymgmt.calendar.rules.planning.PlanningRulesEngine;
 import org.fmm.communitymgmt.calendar.rules.planning.effect.CancelEffect;
 import org.fmm.communitymgmt.calendar.rules.planning.effect.RuleEffect;
@@ -24,12 +25,19 @@ import org.fmm.communitymgmt.common.repository.calendar.EventRepository;
 import org.fmm.communitymgmt.common.repository.templates.CelebrationEventTemplateRepository;
 import org.fmm.communitymgmt.common.util.enums.EventTypeEnum;
 import org.fmm.communitymgmt.common.util.enums.TripodEnum;
+import org.fmm.communitymgmt.dto.EventDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import jakarta.annotation.PostConstruct;
 
 @org.springframework.stereotype.Service("CommunityPlanningService")
 public class CommunityPlanningServiceImpl implements CommunityPlanningService {
+//	protected final Log logger = LogFactory.getLog(this.getClass());
+//	private static final Logger logger = LoggerFactory.getLogger(CommunityPlanningServiceImpl.class);
+	private final Logger logger = LoggerFactory.getLogger(CommunityPlanningServiceImpl.class);
+
 
     @Autowired
     private CommunitySettingsRepository communitySettingsRepository;
@@ -77,7 +85,7 @@ public class CommunityPlanningServiceImpl implements CommunityPlanningService {
 	/* 
 	 * @TODO ¿Incluir dirección en los eventos convivencias?
 	 */
-	private void planningConvivence(LocalDate fromLDT, LocalDate toLDT, Community community, int nDay, LocalTime time) {
+	private List<EventDTO> planningConvivence(LocalDate fromLDT, LocalDate toLDT, Community community, int nDay, LocalTime time) {
 		//ChronoUnit.WEEKS.
 		//Period
 		//TemporalAdjusters.
@@ -87,23 +95,54 @@ public class CommunityPlanningServiceImpl implements CommunityPlanningService {
 		List<LocalDate> convivenceDates = getNDayOfWeekByMonth(fromLDT, toLDT, DayOfWeek.SUNDAY, nDay);
 		//tEventTypeRepository.findAll();
 		Event convivence = null;
+		EventDTO convivenceDto = null;
 		RuleEffect effect = null;
+		PlanningRule appliedRule = null;
+		
+		List<EventDTO> events = null;
+		events = new ArrayList<EventDTO>(convivenceDates.size());
+		
 		for (LocalDate date: convivenceDates) {
+			effect = null;
+			appliedRule = null;
+			convivenceDto = new EventDTO();
 			
-			effect = rulesEngine.evaluate(TripodEnum.COMMUNITY, date);
-			if (effect instanceof CancelEffect)
-				continue;
-
-			convivence = new Event();
-			convivence.setEventDate(date);
-			convivence.setEventTime(time);
-			convivence.setEventName(String.format("Convivence %s",date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault())));
-			convivence.setCommunity(community);
-			convivence.setNeedGroup(false);
-			convivence.setTripodType(TTripod.from(TripodEnum.COMMUNITY));
-			convivence.setEventLocation(TEventType.from(EventTypeEnum.OTHER));
-			eventRepository.save(convivence);
+//			effect = rulesEngine.evaluate(TripodEnum.COMMUNITY, date);
+//			if (effect instanceof CancelEffect)
+//				continue;
+			appliedRule = rulesEngine.evaluate(TripodEnum.COMMUNITY, date);
+			convivenceDto = createConvivence(date, community, time);
+			convivenceDto.setAppliedRule(appliedRule);
+			events.add(convivenceDto);
+			logger.debug("{}",convivenceDto);
+/*			
+			if (appliedRule != null) {
+				logger.debug("Applied Rule: {}",appliedRule);
+				effect = appliedRule.getEffect();
+			}
+*/			
 		}
+		return events;
+	}
+	
+	private EventDTO createConvivence(LocalDate date, Community community, LocalTime time) {
+		Event convivence = null;
+		EventDTO convivenceDto = null;
+		
+		convivence = new Event();
+		convivence.setEventDate(date);
+		convivence.setEventTime(time);
+		convivence.setEventName(String.format("Convivence %s",date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault())));
+		convivence.setCommunity(community);
+		convivence.setNeedGroup(false);
+		convivence.setTripodType(TTripod.from(TripodEnum.COMMUNITY));
+		convivence.setEventLocation(TEventType.from(EventTypeEnum.OTHER));
+		convivence = eventRepository.save(convivence);
+		convivenceDto = new EventDTO();
+		convivenceDto.setEvent(convivence);
+		
+		
+		return convivenceDto;
 	}
 	
 	private void planningEucharists(LocalDate fromLDT, LocalDate toLDT, Community community, LocalTime time) {

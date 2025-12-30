@@ -9,13 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.fmm.communitymgmt.calendar.rules.RuleCondition;
-import org.fmm.communitymgmt.calendar.rules.RuleScope;
-import org.fmm.communitymgmt.calendar.rules.conditions.DateRangeCondition;
-import org.fmm.communitymgmt.calendar.rules.conditions.FixedDateCondition;
-import org.fmm.communitymgmt.calendar.rules.conditions.HolidayCondition;
-import org.fmm.communitymgmt.calendar.rules.conditions.WeekOfCondition;
-import org.fmm.communitymgmt.calendar.rules.conditions.WeekdayCondition;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.AbstractComputus;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.EasterComputus;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.FixedComputus;
@@ -27,6 +20,8 @@ import org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust.AddAdjust;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust.AdjustEnum;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust.ClosestWeekdayAdjust;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust.NextNthWeekdayAdjust;
+import org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust.OnOrNextWeekdayAdjust;
+import org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust.OnOrPreviousWeekdayAdjust;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust.PreviousNthWeekdayAdjust;
 import org.springframework.stereotype.Component;
 
@@ -129,73 +124,50 @@ public class LiturgyRuleLoader {
         String id = node.get("id").asText();
         String name = node.get("name").asText();
         String kind = node.get("kind").asText();
+        String override = null;
+        if (node.has("override"))
+        	override = node.get("override").asText();
+        
         int liturgicalYearShift = 0;
         if (node.has("liturgicalYearShift"))
         	liturgicalYearShift = node.get("liturgicalYearShift").asInt();
         
-        RuleScope scope = parseScope(node.get("scope"));
-        List<RuleCondition> conditions = parseConditions(node.get("conditions"));
-        //RuleEffect effect = parseEffect(node.get("effect"));
+        LiturgyRuleScope scope = parseScope(node.get("scope"));
+        //List<RuleCondition> conditions = parseConditions(node.get("conditions"));
+
         AbstractComputus computus = parseComputus(node.get("payload").get("computus"));
         if (!kind.equals("LITURGY"))
         	throw new RuntimeException("[FMMP] Bad JSON structure");
         
-        return new LiturgyRule(id, name, liturgicalYearShift,scope, conditions, computus);
+        return new LiturgyRule(id, name, liturgicalYearShift,scope, computus,override);
     }
 
-    private RuleScope parseScope(JsonNode node) {
+    /**
+     * universal | county | diocese | local
+     * @param node
+     * @return
+     */
+    private LiturgyRuleScope parseScope(JsonNode node) {
     	if (node == null)
     		return null;
-        List<String> celebrations = new ArrayList<>();
-        node.get("celebrations").forEach(c -> celebrations.add(c.asText()));
-        return new RuleScope(celebrations);
-    }
-
-    private List<RuleCondition> parseConditions(JsonNode array) {
-        List<RuleCondition> list = new ArrayList<>();
-        if (array == null)
-        	return null;
+    	
+    	LiturgyRuleScope scope = null;
+        JsonNode arrayJsonNode = null;
+    	
+        List<String> values = new ArrayList<>();
+        String scopeStr = null;
         
-        for (JsonNode cond : array) {
-            String type = cond.get("type").asText();
-            JsonNode v = cond.get("value");
-
-            switch (type) {
-
-                case "FIXED_DATE" -> list.add(
-                        new FixedDateCondition(v.get("month").asInt(), v.get("day").asInt())
-                );
-
-                case "WEEKDAY" -> list.add(
-                        new WeekdayCondition(DayOfWeek.valueOf(v.asText()))
-                );
-
-                case "DATE_RANGE" -> list.add(
-                        new DateRangeCondition(
-                                v.get("start").asText(),
-                                v.get("end").asText()
-                        )
-                );
-
-                case "HOLIDAY" -> list.add(new HolidayCondition(v.asText()));
-                case "WEEK_OF" -> {
-                	List<Integer> offset = null;
-                	JsonNode node = v.get("offset");
-                	if (node.isArray()) {
-                		offset = new ArrayList<>();
-                	    for (final JsonNode objNode : node) {
-                	    	offset.add(objNode.asInt());
-                	    }
-                	};
-                	list.add(
-                		new WeekOfCondition(v.get("date").asText(), offset)
-                	);
-                }
-                default -> throw new IllegalArgumentException("Unknown condition type: " + type);
-            }
-        }
-
-        return list;
+        scopeStr = node.get("magnitude").asText();
+        
+        scope = new LiturgyRuleScope(scopeStr, values);
+        arrayJsonNode = node.get("values");
+        
+		if (arrayJsonNode != null && arrayJsonNode.isArray()) {
+			for (JsonNode magnNode: arrayJsonNode) {
+				scope.addMagnitude(magnNode.asText());
+			}
+		}
+        return scope;
     }
 
     private AbstractComputus parseComputus(JsonNode node) {
@@ -303,10 +275,20 @@ public class LiturgyRuleLoader {
 				nth = adjustJson.get("nth").asInt();
 				adjust = new NextNthWeekdayAdjust(DayOfWeek.valueOf(weekday), nth);
 			}
+			case ON_OR_NEXT_NTH_WEEKDAY -> {
+				weekday = adjustJson.get("weekday").asText();
+				nth = adjustJson.get("nth").asInt();
+				adjust = new OnOrNextWeekdayAdjust(DayOfWeek.valueOf(weekday));
+			}
 			case PREVIOUS_NTH_WEEKDAY -> {
 				weekday = adjustJson.get("weekday").asText();
 				nth = adjustJson.get("nth").asInt();
 				adjust = new PreviousNthWeekdayAdjust(DayOfWeek.valueOf(weekday), nth);
+			}
+			case ON_OR_PREVIOUS_NTH_WEEKDAY -> {
+				weekday = adjustJson.get("weekday").asText();
+				nth = adjustJson.get("nth").asInt();
+				adjust = new OnOrPreviousWeekdayAdjust(DayOfWeek.valueOf(weekday));
 			}
 			default -> throw new IllegalArgumentException("Unexpected value: " + typeEnum);
 			}

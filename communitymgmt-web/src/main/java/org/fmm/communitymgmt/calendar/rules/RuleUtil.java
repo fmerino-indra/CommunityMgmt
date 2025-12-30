@@ -18,7 +18,7 @@ public class RuleUtil {
 	public static int weekOfMonthOfDate(LocalDate date) {
         WeekFields wf = WeekFields.ISO; // lunes como primer día
         int semanaDelMes = date.get(wf.weekOfMonth());
-        System.out.println(semanaDelMes);
+//        System.out.println(semanaDelMes);
 		return semanaDelMes;
 	}
 	

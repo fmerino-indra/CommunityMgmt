@@ -24,8 +24,15 @@ import jakarta.persistence.Transient;
  */
 @Entity
 public class Event implements Serializable {
+/*	
+	private static final String pattern = "dd-MM-yyyy";
+	private static final String timePattern = "HH:mm";
+	private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+	private static SimpleDateFormat simpleTimeFormat = new SimpleDateFormat(timePattern);
+*/	
 	private static final long serialVersionUID = 1L;
 
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -135,4 +142,8 @@ public class Event implements Serializable {
 		return ldt;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%s-%s-%s", getEventDate(), getEventName(), getEventTime());
+	}
 }

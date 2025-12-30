@@ -1,7 +1,6 @@
 package org.fmm.communitymgmt.calendar.rules.conditions;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.fmm.communitymgmt.calendar.rules.RuleCondition;
