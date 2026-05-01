@@ -6,6 +6,7 @@ import java.util.List;
 import org.fmm.communitymgmt.calendar.rules.liturgy.LiturgyRuleContext;
 import org.fmm.communitymgmt.calendar.rules.liturgy.LiturgyRuleRegistry;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust.AbstractAdjust;
+import org.fmm.communitymgmt.calendar.rules.liturgy.result.LiturgyDateResult;
 
 /**
  * 
@@ -26,7 +27,7 @@ import org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust.AbstractAdju
         }
     }
  */
-public class RelativeToFixedComputus extends RelativeToComputus {
+public class RelativeToFixedComputus extends AbstractRelativeToComputus {
 	private int month;
 	private int day;
 	
@@ -45,13 +46,13 @@ public class RelativeToFixedComputus extends RelativeToComputus {
 	}
 
 	@Override
-	public LocalDate compute(int liturgicalYear, LiturgyRuleContext ctx, LiturgyRuleRegistry registry) {
+	public LiturgyDateResult compute(int liturgicalYear, LiturgyRuleContext ctx, LiturgyRuleRegistry registry) {
 		LocalDate baseDate = LocalDate.of(liturgicalYear, month, day);
 		LocalDate cur = baseDate;
 		for (AbstractAdjust adjust: getAdjustList()) {
 			cur = adjust.apply(cur);
 		}
-		return cur;
+		return new LiturgyDateResult(cur);
 	}
     @Override
     public String toString() {

@@ -1,6 +1,7 @@
 package org.fmm.communitymgmt.common.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -9,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 
@@ -43,7 +45,26 @@ public class Community implements Serializable {
 	//@OneToOne(cascade = CascadeType.ALL)
 	//@PrimaryKeyJoinColumn // En JPA 2.0 ha sido sustituido por MapsId
 	private CommunitySettings communitySettings;
-	
+
+	@OneToMany(mappedBy = "community")
+	private List<CommunitySettingsYear> communitySettingsYear;
+
+	public List<CommunitySettingsYear> getCommunitySettingsYear() {
+		return communitySettingsYear;
+	}
+
+	public void setCommunitySettingsYear(List<CommunitySettingsYear> communitySettingsYear) {
+		this.communitySettingsYear = communitySettingsYear;
+	}
+
+	public CommunitySettings getCommunitySettings() {
+		return communitySettings;
+	}
+
+	public void setCommunitySettings(CommunitySettings communitySettings) {
+		this.communitySettings = communitySettings;
+	}
+
 	public Community() {
 	}
 

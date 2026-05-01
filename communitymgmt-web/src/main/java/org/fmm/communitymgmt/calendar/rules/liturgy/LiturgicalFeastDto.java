@@ -2,7 +2,9 @@ package org.fmm.communitymgmt.calendar.rules.liturgy;
 
 import java.time.LocalDate;
 
-public class LiturgicalFeast {
+import org.fmm.communitymgmt.common.model.calendar.LiturgicalFeast;
+
+public class LiturgicalFeastDto {
 	private String id;
 	private String name;
 	private LocalDate date;
@@ -11,7 +13,7 @@ public class LiturgicalFeast {
 //	private FeastRankEnum rank;
 //	private FeastTypeEnum type;
 	
-	public LiturgicalFeast(String id, String name, LocalDate date, String ruleId) {
+	public LiturgicalFeastDto(String id, String name, LocalDate date, String ruleId) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -42,4 +44,13 @@ public class LiturgicalFeast {
         return String.format("LiturgyFeast{ %s: %s -> %s (rule=%s)}", id, name, date, ruleId);
     }
 	
+	public static LiturgicalFeast fromDto(LiturgicalFeastDto dto) {
+		LiturgicalFeast feast = new LiturgicalFeast();
+		feast.setFeastDate(dto.date);
+		feast.setName(dto.getName());
+		feast.setRuleId(dto.ruleId);
+		
+		return feast;
+	}
+
 }

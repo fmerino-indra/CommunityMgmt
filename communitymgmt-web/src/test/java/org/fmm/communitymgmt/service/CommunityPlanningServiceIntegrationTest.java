@@ -1,10 +1,14 @@
 package org.fmm.communitymgmt.service;
 
-import java.time.LocalDate;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
 
 import org.fmm.communitymgmt.common.config.YamlPropertySourceFactory;
 import org.fmm.communitymgmt.common.model.Community;
 import org.fmm.communitymgmt.common.model.CommunitySettings;
+import org.fmm.communitymgmt.common.model.calendar.Event;
 import org.fmm.communitymgmt.common.repository.CommunityRepository;
 import org.fmm.communitymgmt.common.repository.CommunitySettingsRepository;
 import org.fmm.communitymgmt.service.planning.CommunityPlanningService;
@@ -27,14 +31,8 @@ import org.springframework.test.context.ActiveProfiles;
 // Esto lo cambia para compartir estado entre tests
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
-//@Rollback(false)
-//@DataJpaTest
-
-// Funciona, pero es que quiero que sea otra bbdd
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-//@PropertySource(value="classpath:lib-test-application.yaml", factory = YamlPropertySourceFactory.class)
 @PropertySource(value="classpath:application-test.yaml", factory = YamlPropertySourceFactory.class)
-public class CommunityServiceIntegrationTest {
+public class CommunityPlanningServiceIntegrationTest {
 
 	@Autowired
 	private CommunityPlanningService planningService;
@@ -56,11 +54,12 @@ public class CommunityServiceIntegrationTest {
 	
 	@Test
 	public void testPlanning() {
-		LocalDate from = null;
-		LocalDate until = null;
+		List<Event> eventList = null;
 		
-		from = LocalDate.of(2026, 1, 1);
-		until = LocalDate.of(2026, 12, 31);
-		planningService.planning(from, until, community);
+		settings.getBrothers();
+		
+		eventList = planningService.getPlanning(community.getId(), 2025, 02);
+		assertNotNull(eventList);
+		assertTrue(eventList.size()>0);
 	}
 }

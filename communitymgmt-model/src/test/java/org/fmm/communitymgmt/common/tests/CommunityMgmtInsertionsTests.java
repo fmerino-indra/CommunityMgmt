@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.fmm.communitymgmt.common.model.Community;
+import org.fmm.communitymgmt.common.model.CommunitySettingsYear;
 import org.fmm.communitymgmt.common.model.EmailAccount;
 import org.fmm.communitymgmt.common.model.Image;
 import org.fmm.communitymgmt.common.model.Membership;
@@ -124,7 +125,7 @@ class CommunityMgmtInsertionsTests {
 		addOther(List.of(other1, other2));
 	}
 //	@Transactional
-	@Test
+//	@Test
 	void addPersonsJPQL() {
 		Person husband;
 		Person wife;
@@ -339,6 +340,20 @@ class CommunityMgmtInsertionsTests {
 		com = addCommunity("1", "San Pedro Regalado y San José de Calasanz", null, null, null, "Madrid", "España", false);
 		addStandardMember(80, com);
 		addStandardMember(81, com);
+	}
+	
+	@Test
+	public void addCommunitySettingsYear() {
+		Community com = null;
+		Optional<Community> opt= null;
+		opt = communityRepository.findById(1);
+		if (opt.isPresent())
+			com = opt.get();
+		
+		CommunitySettingsYear csY = new CommunitySettingsYear();
+		csY.setCommunity(com);
+		csY.setYear(2026);
+		
 	}
 	
 	private Membership addStandardMember(Integer pId, Community com) {

@@ -5,10 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.fmm.communitymgmt.calendar.rules.liturgy.LiturgyRule;
+import org.fmm.communitymgmt.calendar.rules.liturgy.AbstractLiturgyRule;
 import org.fmm.communitymgmt.calendar.rules.liturgy.LiturgyRuleContext;
 import org.fmm.communitymgmt.calendar.rules.liturgy.LiturgyRuleRegistry;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust.AbstractAdjust;
+import org.fmm.communitymgmt.calendar.rules.liturgy.result.LiturgyDateResult;
 
 /**
  * 
@@ -64,7 +65,7 @@ import org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust.AbstractAdju
         }
     }
  */
-public class RelativeToBaseComputus extends RelativeToComputus {
+public class RelativeToBaseComputus extends AbstractRelativeToComputus {
 	private String baseRuleId;
 	public RelativeToBaseComputus(String baseRuleId, List<AbstractAdjust> adjustList) {
 		super(ComputusTypeEnum.RELATIVE_TO_BASE_COMPUTUS, adjustList);
@@ -77,22 +78,23 @@ public class RelativeToBaseComputus extends RelativeToComputus {
 
 
 	@Override
-	public LocalDate compute(int liturgicalYear, LiturgyRuleContext ctx, LiturgyRuleRegistry registry) {
-		LiturgyRule baseRule = registry.get(baseRuleId);
+	public LiturgyDateResult compute(int liturgicalYear, LiturgyRuleContext ctx, LiturgyRuleRegistry registry) {
+		
+		AbstractLiturgyRule baseRule = registry.get(baseRuleId);
 		if (baseRule == null)
 			throw new IllegalStateException("Base rule not found: " + baseRuleId);
 		// compute base (it should have been computed earlier)
 		LocalDate baseDate = registry.getComputedDate(baseRuleId);
 		if (baseDate == null) {
 			// If not computed yet, attempt to compute now (defensive)
-			baseDate = baseRule.getComputus().compute(liturgicalYear, ctx, registry);
+			baseDate = (LocalDate)baseRule.getComputus().compute(liturgicalYear, ctx, registry).getResult();
 			registry.setComputedDate(baseRuleId, baseDate);
 		}
 		LocalDate cur = baseDate;
 		for (AbstractAdjust adjust: getAdjustList()) {
 			cur = adjust.apply(cur);
 		}
-		return cur;
+		return new LiturgyDateResult(cur);
 	}
     @Override
     public Set<String> referencedRuleIds() {

@@ -1,5 +1,5 @@
 {
-    "rules": [
+    "liturgical-rules": [
         {
             "id": "easter",
             "name": "Domingo de Pascua",
@@ -290,6 +290,28 @@
             }
         },
         {
+            "id": "baptism_of_the_lord",
+            "name": "Bautismo del Señor",
+            "kind": "LITURGY",
+            "scope": {
+                "magnitude": "universal"
+            },
+            "liturgicalYearShift": 0,
+            "payload": {
+                "computus": {
+                    "type": "RELATIVE_TO_BASE_COMPUTUS",
+                    "base": "epiphany",
+                    "adjust": [
+                        {
+                            "type": "NEXT_NTH_WEEKDAY",
+                            "weekday": "SUNDAY",
+                            "nth": 1
+                        }
+                    ]
+                }
+            }
+        },
+        {
             "id": "annunciation",
             "name": "Anunciación del Señor",
             "kind": "LITURGY",
@@ -440,5 +462,142 @@
                 }
             }
         }
-    ]
+    ],
+  "period-rules": [
+    {
+      "id": "summer",
+      "name": "Verano",
+      "kind": "FUNCTIONAL_PERIOD",
+      "payload": {
+        "computus": {
+          "type": "FIXED_RANGE",
+          "period": {
+            "init": "",
+            "end": ""
+          }
+        }
+      }
+    },
+
+    {
+      "id": "advent",
+      "name": "Adviento",
+      "kind": "LITURGICAL_PERIOD",
+      "payload": {
+        "computus": {
+          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "period": {
+            "init": "first_sunday_advent",
+            "end": "christmas"
+          }
+        }
+      }
+    },
+
+    {
+      "id": "christmas-time",
+      "name": "Navidad",
+      "kind": "LITURGICAL_PERIOD",
+      "payload": {
+        "computus": {
+          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "period": {
+            "init": "christmas",
+            "end": "baptism_of_the_lord"
+          }
+        }
+      }
+    },
+
+    {
+      "id": "ordinary_time_1",
+      "name": "Tiempo Ordinario (parte 1)",
+      "kind": "LITURGICAL_PERIOD",
+      "payload": {
+        "computus": {
+          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "period": {
+            "init": "baptism_of_the_lord",
+            "end": "ash_wednesday"
+          }
+        }
+      }
+    },
+
+    {
+      "id": "lent",
+      "name": "Cuaresma",
+      "kind": "LITURGICAL_PERIOD",
+      "payload": {
+        "computus": {
+          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "period": {
+            "init": "ash_wednesday",
+            "end": "holy_thursday"
+          }
+        }
+      }
+    },
+
+    {
+      "id": "holy_week",
+      "name": "Semana Santa (Domingo de Ramos - Jueves Santo antes de la Cena)",
+      "kind": "LITURGICAL_PERIOD",
+      "payload": {
+        "computus": {
+          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "period": {
+            "init": "palm_sunday",
+            "end": "easter"
+          }
+        }
+      }
+    },
+
+    {
+      "id": "easter_triduum",
+      "name": "Triduo Pascual",
+      "kind": "LITURGICAL_PERIOD",
+      "payload": {
+        "computus": {
+          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "period": {
+            "init": "holy_thursday",
+            "end": "easter"
+          }
+        }
+      }
+    },
+
+    {
+      "id": "easter_time",
+      "name": "Tiempo de Pascua",
+      "kind": "LITURGICAL_PERIOD",
+      "payload": {
+        "computus": {
+          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "period": {
+            "init": "easter",
+            "end": "pentecost"
+          }
+        }
+      }
+    },
+
+    {
+      "id": "ordinary_time_2",
+      "name": "Tiempo Ordinario (parte 2)",
+      "kind": "LITURGICAL_PERIOD",
+      "payload": {
+        "computus": {
+          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "period": {
+            "init": "pentecost",
+            "end": "christ_the_king"
+          }
+        }
+      }
+    }
+
+  ]
 }

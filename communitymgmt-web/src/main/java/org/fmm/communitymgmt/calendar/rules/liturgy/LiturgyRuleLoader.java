@@ -9,9 +9,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.fmm.communitymgmt.calendar.rules.RuleKindEnum;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.AbstractComputus;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.EasterComputus;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.FixedComputus;
+import org.fmm.communitymgmt.calendar.rules.liturgy.computus.Period;
+import org.fmm.communitymgmt.calendar.rules.liturgy.computus.PeriodComputus;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.RelativeToBaseComputus;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.RelativeToFixedComputus;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.RelativeToInlineComputus;
@@ -110,17 +113,48 @@ public class LiturgyRuleLoader {
      * @return
      * @throws IOException
      */
-    public List<LiturgyRule> load(Path path) throws IOException {
+    /*
+    public List<LiturgyRule> loadLiturgy(Path path) throws IOException {
         JsonNode root = mapper.readTree(Files.readAllBytes(path));
-        List<LiturgyRule> rules = new ArrayList<>();
-        
+        List<LiturgyRule> liturgyRules = new ArrayList<>();
+        List<LiturgyRule> periodRules = new ArrayList<>();
+        LiturgyRule rule = null;
         for (JsonNode node : root.get("rules")) {
-            rules.add(parseRule(node));
+        	rule = parseRule(node);
+        	if (rule.getKind().equals(RuleKindEnum.LITURGY))
+        		liturgyRules.add(rule);
+        	else if (rule.getKind().equals(RuleKindEnum.LITURGICAL_PERIOD))
+        		periodRules.add(rule);
         }
-        return rules;
+        return liturgyRules;
+    }
+*/
+    public LiturgyRuleRegistry load(Path path) throws IOException {
+    	
+        JsonNode root = mapper.readTree(Files.readAllBytes(path));
+        LiturgyRuleRegistry registry = new LiturgyRuleRegistry();
+        
+        AbstractLiturgyRule rule = null;
+        // Pueden mezclarse, pero mejor no
+        for (JsonNode node : root.get("liturgical-rules")) {
+        	rule = parseRule(node);
+        	if (rule.getKind().equals(RuleKindEnum.LITURGY))
+        		registry.register((LiturgyRule)rule);
+        	else if (rule.getKind().equals(RuleKindEnum.LITURGICAL_PERIOD))
+        		registry.register((LiturgicalPeriodRule)rule);
+        }
+        for (JsonNode node : root.get("period-rules")) {
+        	rule = parseRule(node);
+        	if (rule.getKind().equals(RuleKindEnum.LITURGY))
+        		registry.register((LiturgyRule)rule);
+        	else if (rule.getKind().equals(RuleKindEnum.LITURGICAL_PERIOD))
+        		registry.register((LiturgicalPeriodRule)rule);
+        }
+        
+        return registry;
     }
 
-    private LiturgyRule parseRule(JsonNode node) {
+	private AbstractLiturgyRule parseRule(JsonNode node) {
         String id = node.get("id").asText();
         String name = node.get("name").asText();
         String kind = node.get("kind").asText();
@@ -136,10 +170,20 @@ public class LiturgyRuleLoader {
         //List<RuleCondition> conditions = parseConditions(node.get("conditions"));
 
         AbstractComputus computus = parseComputus(node.get("payload").get("computus"));
-        if (!kind.equals("LITURGY"))
+        if (kind.equals(RuleKindEnum.LITURGY.toString())) {
+            return new LiturgyRule(id, name, liturgicalYearShift,scope, computus,override);
+        	
+        } else if (kind.equals(RuleKindEnum.LITURGICAL_PERIOD.toString())) {
+            return new LiturgicalPeriodRule(id, name, liturgicalYearShift,scope, computus,override);
+        	
+        } else {
         	throw new RuntimeException("[FMMP] Bad JSON structure");
-        
+        }
+        /*
+        if (!kind.equals("LITURGY") && !kind.equals("PERIOD_LITURGY"))
+        	throw new RuntimeException("[FMMP] Bad JSON structure");
         return new LiturgyRule(id, name, liturgicalYearShift,scope, computus,override);
+        */
     }
 
     /**
@@ -180,9 +224,18 @@ public class LiturgyRuleLoader {
     	JsonNode adjustJson;
     	List<AbstractAdjust> adjustList = null;
     	
+    	JsonNode periodJson;
+    	Period period = null;
+    	
     	adjustJson = node.get("adjust");
     	if (adjustJson != null)
     		adjustList = parseAdjust(adjustJson);
+    	else {
+    		periodJson = node.get("period");
+    		if (periodJson != null) {
+    			period = parsePeriod(periodJson);
+    		}
+    	}
         switch (type) {
         /*
  		*/
@@ -209,16 +262,24 @@ public class LiturgyRuleLoader {
 			base = node.get("base").asText();
 			computus = new RelativeToBaseComputus(base, adjustList);
 		}
+		case "RELATIVE_TO_PERIOD_COMPUTUS" -> {
+			computus = new PeriodComputus(period );
+		}
         }
         
         return computus;
     }
+    private Period parsePeriod(JsonNode periodJson) {
+		return Period.fromJsonNode(periodJson);
+	}
+
 /**
- *                    "adjust":{
- *		                    "type": "ADD_VALUES",
- *		                    "value": -4,
- *		                    "unit": WEEKS (WEEKS | DAYS)
- *		                }
+ *
+  "adjust":{
+        "type": "ADD_VALUES",
+        "value": -4,
+        "unit": WEEKS (WEEKS | DAYS)
+    }
 
  * @param adjustJson
  * @return

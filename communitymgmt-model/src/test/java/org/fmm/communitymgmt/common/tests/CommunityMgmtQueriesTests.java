@@ -19,6 +19,7 @@ import org.fmm.communitymgmt.common.model.Membership;
 import org.fmm.communitymgmt.common.model.RMarriage;
 import org.fmm.communitymgmt.common.model.RSingle;
 import org.fmm.communitymgmt.common.model.Relationship;
+import org.fmm.communitymgmt.common.model.calendar.Event;
 import org.fmm.communitymgmt.common.model.templates.CelebrationCycleTemplate;
 import org.fmm.communitymgmt.common.model.templates.CelebrationEventTemplate;
 import org.fmm.communitymgmt.common.repository.CommunityRepository;
@@ -31,6 +32,7 @@ import org.fmm.communitymgmt.common.repository.OthersRepository;
 import org.fmm.communitymgmt.common.repository.PersonRepository;
 import org.fmm.communitymgmt.common.repository.RelationshipRepository;
 import org.fmm.communitymgmt.common.repository.SingleRepository;
+import org.fmm.communitymgmt.common.repository.calendar.EventRepository;
 import org.fmm.communitymgmt.common.repository.templates.CelebrationCycleTemplateRepository;
 import org.fmm.communitymgmt.common.repository.templates.CelebrationEventTemplateRepository;
 import org.fmm.communitymgmt.common.testconfig.CommunityMgmtCommonTestConfiguration;
@@ -47,6 +49,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 // Esto configura springboot completo para tests integrados.
 // Para JPA es mejor @DataJPATest
@@ -101,8 +104,11 @@ class CommunityMgmtQueriesTests {
     @Autowired
     private CelebrationEventTemplateRepository cetRepository;
     
+    @Autowired
+    EventRepository eventRepository;
     
-	@Test
+
+//	@Test
 	void testWordCycles() {
 		List<CelebrationCycleTemplate> cycles = cctRepository.findAll();
 		List<CelebrationEventTemplate> events= cetRepository.listEventTemplatesByCycleId(1);
@@ -182,6 +188,47 @@ class CommunityMgmtQueriesTests {
 		oRMarriage = marriageRepository.findRMarriageByPersonId(2);
 		assertNotNull(oRSingle);
 		assertNotNull(oRMarriage);
+	}
+	
+	@Test
+	void testFindEvents() {
+		List<Event> list = null;
+		list = eventRepository.findAllEventByYearAndMonth(1, 2025, 2);
+		assertNotNull(list);
+		writeList(list, "eventList.json");
+
+	}
+
+	private static <T> void writeList(List<T> largeList, String name) {
+		Path path = Paths.get("queries", name);
+		File file = path.toFile();
+		
+		ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+		
+		JsonFactory jFactory = objectMapper.getFactory(); 
+		JsonGenerator jGenerator = null;
+
+		try {
+			jGenerator = jFactory.createGenerator(new FileOutputStream(file));
+			jGenerator.writeStartObject();
+			jGenerator.writeFieldName("events");
+			jGenerator.writeStartArray();
+			
+			objectMapper.writeValue(jGenerator, largeList);
+			
+//			for (T r:largeList) {
+//				objectMapper.writeValue(jGenerator, r);
+//			}
+			jGenerator.writeEndArray();
+			jGenerator.writeEndObject();
+			jGenerator.close();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@SuppressWarnings("unused")

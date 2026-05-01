@@ -7,7 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.fmm.communitymgmt.calendar.rules.liturgy.result.LiturgyPeriodResult;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
@@ -18,16 +21,21 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest
 @ActiveProfiles("test")
 
-class RulesEvaluatorTest {
+class LiturgicalRulesEvaluatorTest {
 
 	@Autowired
 	private ResourceLoader resourceLoader;
+
+	private final Logger logger = LoggerFactory.getLogger(LiturgicalRulesEvaluatorTest.class);
     
     @Test
     void testWordCancelledOnChristmasWeeks() throws Exception {
+        LiturgyRuleRegistry liturgicalRegistry = null;
         // Load rules
 //        File f = new File("liturgy-rules-v3.json");
 //        assertTrue(f.exists(), "liturgy-rules-v3.json must exist in working directory for this test");
+
+        //    	Map<RuleKindEnum, List<AbstractLiturgyRule>> allRules = null;
 
         LiturgyRuleLoader loader = new LiturgyRuleLoader();
         
@@ -35,27 +43,37 @@ class RulesEvaluatorTest {
 		assertTrue(resource.exists(), "liturgy-rules-v5.json must exist in working directory for this test");
 		Path path = resource.getFile().toPath();
         
+		liturgicalRegistry = loader.load(path);
         
-        List<LiturgyRule> rules = loader.load(path);
-
-        LiturgyRuleRegistry registry = new LiturgyRuleRegistry();
-        for (LiturgyRule r: rules) 
-        	registry.register(r);
-
-        LiturgyRuleEvaluator ev = new LiturgyRuleEvaluator(registry);
+//        List<AbstractLiturgyRule> liturgicalRules = allRules.get(RuleKindEnum.LITURGY);
+//        List<AbstractLiturgyRule> periodRules = allRules.get(RuleKindEnum.LITURGICAL_PERIOD);
+/*
+        for (AbstractLiturgyRule r: liturgicalRules) 
+        	liturgicalRegistry.register(r);
+*/
         int litYear = 2026;
-        List<LiturgicalFeast> feasts = ev.evaluate(litYear, "es", "ES");
-
+        LiturgyRuleEvaluator ev = new LiturgyRuleEvaluator(liturgicalRegistry);
+        List<LiturgicalFeastDto> feasts = ev.evaluate(litYear, "es", "ES");
+/*        
+        LiturgyRuleRegistry liturgicalPeriodRegistry = new LiturgyRuleRegistry();
+        for (AbstractLiturgyRule r: periodRules) 
+        	liturgicalRegistry.register(r);
+*/        
+        ev.evaluatePeriods(litYear, "es", "ES");
+        
         // find by id helper
-        java.util.function.Function<String, LiturgicalFeast> byId = (id) -> feasts.stream().filter(x->x.getId().equals(id)).findFirst().orElse(null);
+        java.util.function.Function<String, LiturgicalFeastDto> byId = (id) -> feasts.stream().filter(x->x.getId().equals(id)).findFirst().orElse(null);
 
-        LiturgicalFeast easter = byId.apply("easter");
-        LiturgicalFeast ascension = byId.apply("ascension");
-        LiturgicalFeast pentecost = byId.apply("pentecost");
-        LiturgicalFeast holyThursday = byId.apply("holy_thursday");
-        LiturgicalFeast firstAdvent = byId.apply("first_sunday_advent");
-        LiturgicalFeast christTheKing = byId.apply("christ_the_king");
+        LiturgicalFeastDto easter = byId.apply("easter");
+        LiturgicalFeastDto ascension = byId.apply("ascension");
+        LiturgicalFeastDto pentecost = byId.apply("pentecost");
+        LiturgicalFeastDto holyThursday = byId.apply("holy_thursday");
+        LiturgicalFeastDto firstAdvent = byId.apply("first_sunday_advent");
+        LiturgicalFeastDto christTheKing = byId.apply("christ_the_king");
 
+        LiturgyPeriodResult periodResult = liturgicalRegistry.getComputedResults("advent");
+        logger.debug("{}", periodResult.getResult().toString());
+        
         assertNotNull(easter, "Easter must be computed");
         assertNotNull(ascension, "Ascension must be computed");
         assertNotNull(pentecost, "Pentecost must be computed");

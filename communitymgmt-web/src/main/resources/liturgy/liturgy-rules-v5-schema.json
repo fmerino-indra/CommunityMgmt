@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["liturgical-rules", "period-rules"],
+  "properties": {
+    "liturgical-rules": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/liturgicalRule" }
+    },
+    "period-rules": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/periodRule" }
+    }
+  },
+  "$defs": {
+    "liturgicalRule": {
+      "type": "object",
+      "required": ["id", "name", "kind", "payload"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "kind": {
+          "type": "string",
+          "enum": ["LITURGY"]
+        },
+        "liturgicalYearShift": {
+          "type": "integer"
+        },
+        "override": {
+          "type": "string",
+          "description": "ID de la regla que se sobreescribe"
+        },
+        "scope": { "$ref": "#/$defs/scope" },
+        "payload": {
+          "type": "object",
+          "required": ["computus"],
+          "properties": {
+            "computus": { "$ref": "#/$defs/computus" }
+          }
+        }
+      }
+    },
+
+    "periodRule": {
+      "type": "object",
+      "required": ["id", "name", "kind", "payload"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "kind": {
+          "type": "string",
+          "enum": ["LITURGICAL_PERIOD"]
+        },
+        "payload": {
+          "type": "object",
+          "required": ["computus"],
+          "properties": {
+            "computus": { "$ref": "#/$defs/periodComputus" }
+          }
+        }
+      }
+    },
+
+    "scope": {
+      "type": "object",
+      "required": ["magnitude"],
+      "properties": {
+        "magnitude": {
+          "type": "string",
+          "enum": ["universal", "country"]
+        },
+        "values": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "computus": {
+      "oneOf": [
+        { "$ref": "#/$defs/easterComputus" },
+        { "$ref": "#/$defs/fixedComputus" },
+        { "$ref": "#/$defs/relativeToBaseComputus" },
+        { "$ref": "#/$defs/relativeToFixedComputus" },
+        { "$ref": "#/$defs/relativeToInlineComputus" }
+      ]
+    },
+
+    "periodComputus": {
+      "type": "object",
+      "required": ["type", "period"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["RELATIVE_TO_PERIOD_COMPUTUS"]
+        },
+        "period": {
+          "type": "object",
+          "required": ["init", "end"],
+          "properties": {
+            "init": { "type": "string" },
+            "end": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "easterComputus": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["EASTER_COMPUTUS"]
+        }
+      }
+    },
+
+    "fixedComputus": {
+      "type": "object",
+      "required": ["type", "month", "day"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["FIXED_COMPUTUS"]
+        },
+        "month": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "day": { "type": "integer", "minimum": 1, "maximum": 31 }
+      }
+    },
+
+    "relativeToBaseComputus": {
+      "type": "object",
+      "required": ["type", "base"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["RELATIVE_TO_BASE_COMPUTUS"]
+        },
+        "base": {
+          "type": "string",
+          "description": "ID de otra regla litúrgica"
+        },
+        "adjust": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/adjust" }
+        }
+      }
+    },
+
+    "relativeToFixedComputus": {
+      "type": "object",
+      "required": ["type", "month", "day"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["RELATIVE_TO_FIXED_COMPUTUS"]
+        },
+        "month": { "type": "integer" },
+        "day": { "type": "integer" },
+        "adjust": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/adjust" }
+        }
+      }
+    },
+
+    "relativeToInlineComputus": {
+      "type": "object",
+      "required": ["type", "inline"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["RELATIVE_TO_INLINE_COMPUTUS"]
+        },
+        "inline": {
+          "type": "object",
+          "properties": {
+            "computus": { "$ref": "#/$defs/computus" }
+          }
+        },
+        "adjust": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/adjust" }
+        }
+      }
+    },
+
+    "adjust": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ADD_DAYS",
+            "ADD_WEEKS",
+            "ADD_VALUES",
+            "NEXT_NTH_WEEKDAY",
+            "PREVIOUS_NTH_WEEKDAY",
+            "CLOSEST_WEEKDAY",
+            "ON_OR_NEXT_NTH_WEEKDAY"
+          ]
+        },
+        "value": { "type": "integer" },
+        "unit": {
+          "type": "string",
+          "enum": ["DAYS", "WEEKS"]
+        },
+        "weekday": {
+          "type": "string",
+          "enum": [
+            "MONDAY",
+            "TUESDAY",
+            "WEDNESDAY",
+            "THURSDAY",
+            "FRIDAY",
+            "SATURDAY",
+            "SUNDAY"
+          ]
+        },
+        "nth": { "type": "integer" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

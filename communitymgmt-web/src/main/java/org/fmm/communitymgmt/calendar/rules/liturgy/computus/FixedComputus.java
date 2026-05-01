@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import org.fmm.communitymgmt.calendar.rules.liturgy.LiturgyRuleContext;
 import org.fmm.communitymgmt.calendar.rules.liturgy.LiturgyRuleRegistry;
+import org.fmm.communitymgmt.calendar.rules.liturgy.result.LiturgyDateResult;
 
 public class FixedComputus extends AbstractComputus {
 	private int month; // 1..12
@@ -21,8 +22,8 @@ public class FixedComputus extends AbstractComputus {
 		return day;
 	}
 	@Override
-	public LocalDate compute(int liturgicalYear, LiturgyRuleContext ctx, LiturgyRuleRegistry registry) {
-		return LocalDate.of(liturgicalYear, month, day);
+	public LiturgyDateResult compute(int liturgicalYear, LiturgyRuleContext ctx, LiturgyRuleRegistry registry) {
+		return new LiturgyDateResult( LocalDate.of(liturgicalYear, month, day));
 	}
     @Override
     public String toString() {

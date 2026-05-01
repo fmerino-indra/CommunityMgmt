@@ -12,7 +12,6 @@ import java.util.Optional;
 
 import org.fmm.communitymgmt.calendar.rules.planning.PlanningRule;
 import org.fmm.communitymgmt.calendar.rules.planning.PlanningRulesEngine;
-import org.fmm.communitymgmt.calendar.rules.planning.effect.CancelEffect;
 import org.fmm.communitymgmt.calendar.rules.planning.effect.RuleEffect;
 import org.fmm.communitymgmt.common.model.Community;
 import org.fmm.communitymgmt.common.model.CommunitySettings;
@@ -81,6 +80,11 @@ public class CommunityPlanningServiceImpl implements CommunityPlanningService {
 		planningWords(fromLDT, toLDT, community,DayOfWeek.of(settings.getWordDay()) ,settings.getWordTime(), 1);
 		
 	}
+	
+	@Override
+	public List<Event> getPlanning(Integer communityId, Integer year, Integer month) {
+		return eventRepository.findAllEventByYearAndMonth(communityId, year, month);
+	}
 
 	/* 
 	 * @TODO ¿Incluir dirección en los eventos convivencias?
@@ -134,7 +138,7 @@ public class CommunityPlanningServiceImpl implements CommunityPlanningService {
 		convivence.setEventTime(time);
 		convivence.setEventName(String.format("Convivence %s",date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault())));
 		convivence.setCommunity(community);
-		convivence.setNeedGroup(false);
+		convivence.setGroupNeeded(false);
 		convivence.setTripodType(TTripod.from(TripodEnum.COMMUNITY));
 		convivence.setEventLocation(TEventType.from(EventTypeEnum.OTHER));
 		convivence = eventRepository.save(convivence);
@@ -161,7 +165,7 @@ public class CommunityPlanningServiceImpl implements CommunityPlanningService {
 			convivence.setEventTime(time);
 			convivence.setEventName(String.format("Eucharist %s",date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault())));
 			convivence.setCommunity(community);
-			convivence.setNeedGroup(true);
+			convivence.setGroupNeeded(true);
 			convivence.setTripodType(TTripod.from(TripodEnum.LITURGY));
 			convivence.setEventLocation(TEventType.from(EventTypeEnum.INPARISH));
 			eventRepository.save(convivence);
@@ -175,7 +179,8 @@ public class CommunityPlanningServiceImpl implements CommunityPlanningService {
 	 * @param toLDT
 	 * @param community
 	 * @param time
-	 * @param tolerance. Número de eventos de la plantilla que no caben en el último ciclo. Si la tolerancia es menor que el resto (mod) el último ciclo no se genera.
+	 * @param tolerance. Número de eventos de la plantilla que no caben en el último ciclo. 
+	 *                   Si la tolerancia es menor que el resto (mod) el último ciclo no se genera.
 	 */
 	private void planningWords(LocalDate fromLDT, LocalDate toLDT, Community community, DayOfWeek day, LocalTime time, int tolerance) {
 		//ChronoUnit.WEEKS.
@@ -214,7 +219,7 @@ public class CommunityPlanningServiceImpl implements CommunityPlanningService {
 				//wordCelebration.setEventName(String.format("Word %s",wordDates.get(cycle).getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault())));
 				wordCelebration.setEventName(cet.getName());
 				wordCelebration.setCommunity(community);
-				wordCelebration.setNeedGroup(true);
+				wordCelebration.setGroupNeeded(true);
 				wordCelebration.setTripodType(TTripod.from(TripodEnum.WORD)); 
 				//wordCelebration.setEventLocation(TEventType.from(EventTypeEnum.INPARISH));
 				wordCelebration.setEventLocation(cet.getEventLocation());

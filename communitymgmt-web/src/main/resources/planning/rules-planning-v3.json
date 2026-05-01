@@ -57,7 +57,12 @@
       "name": "Se cancela la Palabra si es festivo nacional",
       "scope": { "celebrations": ["WORD"] },
       "conditions": [
-        { "type": "HOLIDAY", "value": { "holidayType": "NATIONAL" } }
+        { 
+            "type": "HOLIDAY",
+            "value": { 
+                "holidayType": "NATIONAL" 
+            }
+        }
       ],
       "effect": { "type": "CANCEL" }
     },

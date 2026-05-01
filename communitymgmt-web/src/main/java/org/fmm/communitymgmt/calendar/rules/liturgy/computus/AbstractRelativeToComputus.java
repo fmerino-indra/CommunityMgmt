@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust.AbstractAdjust;
 
-public abstract class RelativeToComputus extends AbstractComputus {
+public abstract class AbstractRelativeToComputus extends AbstractComputus {
 
 	protected List<AbstractAdjust> adjustList;
 
-	public RelativeToComputus(ComputusTypeEnum type, List<AbstractAdjust> adjustList) {
+	public AbstractRelativeToComputus(ComputusTypeEnum type, List<AbstractAdjust> adjustList) {
 		super(type);
 		this.adjustList = adjustList;
 	}

@@ -9,6 +9,13 @@ import org.fmm.communitymgmt.common.model.Community;
 import org.fmm.communitymgmt.common.model.common.TEventType;
 import org.fmm.communitymgmt.common.model.common.TTripod;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +30,9 @@ import jakarta.persistence.Transient;
  * 
  */
 @Entity
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "id") // Usará el campo 'id' de la entidad como referencia
 public class Event implements Serializable {
 /*	
 	private static final String pattern = "dd-MM-yyyy";
@@ -40,28 +50,79 @@ public class Event implements Serializable {
 	@Column
 	private String eventName;
 	
-	@Column(columnDefinition = "DATE")
 //	@Column(columnDefinition = "TIMESTAMP")
+	@Column(columnDefinition = "DATE")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate eventDate;
 	
-	@Column(columnDefinition = "TIME")
+	@Column(columnDefinition = "TIME", nullable = true)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
 	private LocalTime eventTime;
 	
 	@Column
-	private Boolean needGroup;
+	@JsonProperty("groupNeeded")
+	private Boolean groupNeeded = false;
+	
+	@Column
+	@JsonProperty("groupAssigned")
+	private Boolean groupAssigned = false;
+	
+	@Column
+	@JsonProperty("published")
+	private Boolean published = false;
 	
 	@ManyToOne
+	@JsonIgnore
 	private TEventType eventLocation; //domestic or in parish
 	
-	@ManyToOne
+	@ManyToOne(optional = true)
+//	@JsonIdentityInfo( 
+			  //generator = ObjectIdGenerators.PropertyGenerator.class,
+			  //property = "id",
+			// Esto lo que hace es un número secuencial, cada vez que cambia y lo poner en atributo @ref: así
+			/*
+			 VER ABAJO
+			 */
+//			  generator = ObjectIdGenerators.IntSequenceGenerator.class, 
+//			  property = "@ref",
+//			  scope = TTripod.class) // Usará el campo 'id' de la entidad como referencia
+//	@JsonIdentityReference(alwaysAsId = false) // ESTO es la clave
+	
+	//@JsonIdentityReference( alwaysAsId = true)
+	@JsonIgnore
 	private TTripod tripodType;
 	
 	@ManyToOne
+	@JsonIgnoreProperties("events") // Ignora la lista de eventos dentro de la comunidad al serializar el evento
+	@JsonIgnore
 	private Community community;
 	
 	@Transient
+	@JsonIgnore
 	private LocalDateTime ldt;
 	
+	@Column(name="year", insertable = false, updatable=false)
+	private Integer year;
+	
+	@Column(name="month", insertable = false, updatable=false)
+	private Integer month;
+	
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	public Integer getMonth() {
+		return month;
+	}
+
+	public void setMonth(Integer month) {
+		this.month = month;
+	}
+
 	public Event() {
 	}
 
@@ -81,12 +142,12 @@ public class Event implements Serializable {
 		this.eventName = eventName;
 	}
 
-	public Boolean getNeedGroup() {
-		return needGroup;
+	public Boolean getGroupNeeded() {
+		return (groupNeeded!=null)?groupNeeded:false;
 	}
 
-	public void setNeedGroup(Boolean needGroup) {
-		this.needGroup = needGroup;
+	public void setGroupNeeded(Boolean needGroup) {
+		this.groupNeeded = needGroup;
 	}
 
 	public Community getCommunity() {
@@ -138,12 +199,69 @@ public class Event implements Serializable {
 			this.ldt = null;
 	}
 
+	@JsonIgnore
 	public LocalDateTime getEventDateTime() {
 		return ldt;
 	}
 
+	@JsonProperty("eventType")
+	public String getEventTypeName() {
+		return (this.getTripodType() != null) ? this.getTripodType().getTripodName() : null;
+	}
+
+	public Boolean getPublished() {
+		return (published != null) ? published:false;
+	}
+
+	public void setPublished(Boolean published) {
+		this.published = published;
+	}
+
+	public Boolean getGroupAssigned() {
+		return (groupAssigned!=null) ? groupAssigned:false;
+	}
+
+	public void setGroupAssigned(Boolean groupAssigned) {
+		this.groupAssigned = groupAssigned;
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("%s-%s-%s", getEventDate(), getEventName(), getEventTime());
 	}
 }
+
+/**
+
+            {
+                "id": 2851,
+                "eventName": "Convivence febrero",
+                "eventDate": "2025-02-16",
+                "eventTime": "11:00:00",
+                "needGroup": false,
+                "tripodType": {
+                    "@ref": 1,
+                    "id": 3,
+                    "tripodName": "Community",
+                    "frequency": 30
+                },
+                "year": 2025,
+                "month": 2
+            },
+            {
+                "id": 2866,
+                "eventName": "Eucharist febrero",
+                "eventDate": "2025-02-01",
+                "eventTime": "20:30:00",
+                "needGroup": true,
+                "tripodType": {
+                    "@ref": 2,
+                    "id": 1,
+                    "tripodName": "Liturgy",
+                    "frequency": 7
+                },
+                "year": 2025,
+                "month": 2
+            },
+
+**/

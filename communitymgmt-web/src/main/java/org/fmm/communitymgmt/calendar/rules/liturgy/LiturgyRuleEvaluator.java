@@ -17,6 +17,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.fmm.communitymgmt.calendar.rules.RuleKindEnum;
+import org.fmm.communitymgmt.calendar.rules.liturgy.result.AbstractLiturgyResult;
+import org.fmm.communitymgmt.calendar.rules.liturgy.result.LiturgyDateResult;
+import org.fmm.communitymgmt.calendar.rules.liturgy.result.LiturgyPeriodResult;
+
 public class LiturgyRuleEvaluator {
 	private final LiturgyRuleRegistry registry;
 
@@ -24,7 +29,7 @@ public class LiturgyRuleEvaluator {
 		this.registry = registry; 
 	}
 
-	public List<LiturgicalFeast> evaluate(int liturgicalYear, String language, String bishopsConferenceCountry) throws Exception {
+	public List<LiturgicalFeastDto> evaluate(int liturgicalYear, String language, String bishopsConferenceCountry) {
 		// compute liturgical year start: first Sunday of Advent of previous calendar
 		// year
 		LocalDate advStart = computeFirstSundayOfAdvent(liturgicalYear - 1);
@@ -32,27 +37,32 @@ public class LiturgyRuleEvaluator {
 
 		// Build dependency graph based on referencedRuleIds
 		Map<String, Set<String>> deps = new HashMap<>(); // node -> set of bases it depends on
-		for (LiturgyRule r : registry.all())
+		for (AbstractLiturgyRule r : registry.allRules())
 			deps.put(r.getId(), new HashSet<>(r.getComputus().referencedRuleIds()));
 
 		// Topological sort
 		List<String> order = topoSort(deps);
 
 		// Evaluate in order
-		List<LiturgicalFeast> out = new ArrayList<>();
+		List<LiturgicalFeastDto> out = new ArrayList<>();
 		
 		for (String ruleId : order) {
 			System.out.println();
-			LiturgyRule rule = registry.get(ruleId);
+			AbstractLiturgyRule rule = registry.get(ruleId);
 			if (!ruleApplies(rule, ctx))
 				continue;
 			System.out.printf("Regla: %s -> %s (%s)", rule.id, rule.name, rule.scope);
-			LocalDate d = rule.getComputus().compute(liturgicalYear+rule.getLiturgicalYearShift(), ctx, registry);
-			if (rule.override != null)
-				registry.setComputedDate(rule.override, d);
-			else
-				registry.setComputedDate(ruleId, d);
-			out.add(new LiturgicalFeast(rule.getId(), rule.getName(), d, rule.getId()));
+			AbstractLiturgyResult<?> result = rule.getComputus().compute(liturgicalYear+rule.getLiturgicalYearShift(), ctx, registry);
+			
+			if (rule.getKind() == RuleKindEnum.LITURGY) {
+				LiturgyDateResult litDateRes = (LiturgyDateResult)result;
+				if (rule.override != null)
+					registry.setComputedDate(rule.override, litDateRes.getResult());
+				else
+					registry.setComputedDate(ruleId, litDateRes.getResult());
+				
+				out.add(new LiturgicalFeastDto(rule.getId(), rule.getName(), (LocalDate)result.getResult(), rule.getId()));
+			}
 		}
 
 		// Sort by date for convenience
@@ -62,8 +72,26 @@ public class LiturgyRuleEvaluator {
 //		out.sort(Comparator.comparing(LiturgicalFeast::getDate));
 		return out;
 	}
+	public void evaluatePeriods(int liturgicalYear, String language, String bishopsConferenceCountry) {
+		LocalDate advStart = computeFirstSundayOfAdvent(liturgicalYear - 1);
+		LiturgyRuleContext ctx = new LiturgyRuleContext(liturgicalYear, advStart,Locale.of(language, bishopsConferenceCountry));
+		
+		for (LiturgicalPeriodRule periodRule: registry.allPeriodRules()) {
 
-	private boolean ruleApplies(LiturgyRule rule, LiturgyRuleContext ctx) {
+			if (!ruleApplies(periodRule, ctx))
+				continue;
+//			periodRule.getComputus().compute(liturgicalYear,ctx, registry);
+
+			System.out.printf("Regla: %s -> %s (%s)\n", periodRule.id, periodRule.name, periodRule.getComputus());
+			LiturgyPeriodResult result = (LiturgyPeriodResult)periodRule.getComputus().compute(liturgicalYear+periodRule.getLiturgicalYearShift(), ctx, registry);
+			
+			if (periodRule.getKind() == RuleKindEnum.LITURGICAL_PERIOD) {
+				registry.setComputedResult(periodRule.id, result);
+			}
+		}
+	}
+
+	private boolean ruleApplies(AbstractLiturgyRule rule, LiturgyRuleContext ctx) {
 		String value = null;
 		if (ctx.region != null)
 			value = ctx.region.getCountry();
@@ -112,10 +140,13 @@ public class LiturgyRuleEvaluator {
 	}
 
 	// First Sunday of Advent: anchor Nov 30, then onOrNext Sunday
-	private static LocalDate computeFirstSundayOfAdvent(int calendarYear) {
+	// TODO [FMMP] MAL!!!
+	// El 1st domingo de Adviento es el domingo más cercano al 30 (no el siguiente)
+    private static LocalDate computeFirstSundayOfAdvent(int calendarYear) {
 		LocalDate anchor = LocalDate.of(calendarYear, Month.NOVEMBER, 30);
 		if (anchor.getDayOfWeek() == DayOfWeek.SUNDAY)
 			return anchor;
 		return anchor.with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
 	}
+
 }

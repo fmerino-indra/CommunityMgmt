@@ -6,6 +6,8 @@ import org.fmm.communitymgmt.common.util.enums.TripodEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -16,11 +18,18 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name="t_tripod")
+/*
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "id",
+		  scope = TTripod.class) // Usará el campo 'id' de la entidad como referencia
+*/		  
 public class TTripod implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 //	@GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@Column

@@ -8,6 +8,7 @@ import java.util.Set;
 import org.fmm.communitymgmt.calendar.rules.liturgy.LiturgyRuleContext;
 import org.fmm.communitymgmt.calendar.rules.liturgy.LiturgyRuleRegistry;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust.AbstractAdjust;
+import org.fmm.communitymgmt.calendar.rules.liturgy.result.LiturgyDateResult;
 
 /**
  * 
@@ -33,7 +34,7 @@ import org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust.AbstractAdju
         }
     }
  */
-public class RelativeToInlineComputus extends RelativeToComputus {
+public class RelativeToInlineComputus extends AbstractRelativeToComputus {
 	protected AbstractComputus inlineComputus;
 	
 	public RelativeToInlineComputus(AbstractComputus dependentComputus, List<AbstractAdjust> adjustList) {
@@ -41,13 +42,13 @@ public class RelativeToInlineComputus extends RelativeToComputus {
 		this.inlineComputus = dependentComputus;
 	}
 	@Override
-	public LocalDate compute(int liturgicalYear, LiturgyRuleContext ctx, LiturgyRuleRegistry registry) {
-		LocalDate base = inlineComputus.compute(liturgicalYear, ctx, registry);
+	public LiturgyDateResult compute(int liturgicalYear, LiturgyRuleContext ctx, LiturgyRuleRegistry registry) {
+		LocalDate base = (LocalDate)inlineComputus.compute(liturgicalYear, ctx, registry).getResult();
 		LocalDate cur = base;
 		for (AbstractAdjust adjust: getAdjustList()) {
 			cur = adjust.apply(cur);
 		}
-		return cur;
+		return new LiturgyDateResult(cur);
 	}
     @Override
     public Set<String> referencedRuleIds(){

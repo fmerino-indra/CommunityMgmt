@@ -5,9 +5,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.fmm.communitymgmt.calendar.rules.liturgy.result.LiturgyPeriodResult;
+
 public class LiturgyRuleRegistry {
 	private final Map<String, LiturgyRule> rules = new HashMap<>();
 	private final Map<String, LocalDate> computedDates = new HashMap<>();
+
+	private final Map<String, LiturgicalPeriodRule> periodRules = new HashMap<>();
+	private final Map<String, LiturgyPeriodResult> computedResults = new HashMap<>();
 	
 	public void register(LiturgyRule r) {
 		rules.put(r.getId(), r);
@@ -17,10 +22,24 @@ public class LiturgyRuleRegistry {
 		return rules.get(id);
 	}
 	
-	public Collection<LiturgyRule> all() {
+	public Collection<LiturgyRule> allRules() {
 		return rules.values();
 	}
 	
+
+	public void register(LiturgicalPeriodRule r) {
+		periodRules.put(r.getId(), r);
+	}
+	
+	public LiturgicalPeriodRule getPeriodRule(String id) {
+		return periodRules.get(id);
+	}
+	
+	public Collection<LiturgicalPeriodRule> allPeriodRules() {
+		return periodRules.values();
+	}
+	
+
 	public void setComputedDate(String id, LocalDate d) {
 		computedDates.put(id, d);
 	}
@@ -29,5 +48,15 @@ public class LiturgyRuleRegistry {
 	}
 	public boolean hasComputedDate(String id) {
 		return computedDates.containsKey(id);
+	}
+
+	public void setComputedResult(String id, LiturgyPeriodResult d) {
+		computedResults.put(id, d);
+	}
+	public LiturgyPeriodResult getComputedResults(String id) {
+		return computedResults.get(id);
+	}
+	public boolean hasComputedResult(String id) {
+		return computedResults.containsKey(id);
 	}
 }

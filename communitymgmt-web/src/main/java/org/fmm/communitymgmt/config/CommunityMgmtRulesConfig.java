@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.fmm.communitymgmt.calendar.rules.RulesEngine;
-import org.fmm.communitymgmt.calendar.rules.liturgy.LiturgyRule;
+import org.fmm.communitymgmt.calendar.rules.liturgy.AbstractLiturgyRule;
 import org.fmm.communitymgmt.calendar.rules.liturgy.LiturgyRuleLoader;
 import org.fmm.communitymgmt.calendar.rules.planning.PlanningRule;
 import org.fmm.communitymgmt.calendar.rules.planning.PlanningRuleLoader;

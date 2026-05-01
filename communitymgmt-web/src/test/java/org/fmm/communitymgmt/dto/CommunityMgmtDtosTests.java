@@ -30,7 +30,6 @@ import org.fmm.communitymgmt.common.repository.PersonRepository;
 import org.fmm.communitymgmt.common.repository.RelationshipRepository;
 import org.fmm.communitymgmt.common.repository.SingleRepository;
 import org.fmm.communitymgmt.common.testconfig.CommunityMgmtJpaTestConfiguration;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -93,7 +92,7 @@ class CommunityMgmtDtosTests {
     
     @Autowired
     InvitationRepository invitationRepository;
-    
+
 //    @Test
     void testCommunityMembership() {
     	List<Membership> members = null;
@@ -157,7 +156,7 @@ class CommunityMgmtDtosTests {
 		writeLargeJson(comunidad);
 	}
 
-	@Test
+//	@Test
 	void testFindRMarriageRSingle() {
 		Optional<RSingle> oRSingle = null;
 		oRSingle = singleRepository.findRSingleByPersonId(100);

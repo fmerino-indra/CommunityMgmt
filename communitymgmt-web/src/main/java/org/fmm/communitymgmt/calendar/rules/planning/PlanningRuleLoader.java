@@ -54,7 +54,11 @@ public class PlanningRuleLoader {
         node.get("celebrations").forEach(c -> celebrations.add(c.asText()));
         return new RuleScope(celebrations);
     }
-
+/**
+ * 
+ * @param array
+ * @return
+ */
     private List<RuleCondition> parseConditions(JsonNode array) {
         List<RuleCondition> list = new ArrayList<>();
 
@@ -92,6 +96,10 @@ public class PlanningRuleLoader {
                 	list.add(
                 		new WeekOfCondition(v.get("date").asText(), offset)
                 	);
+                }
+                case "PERIOD_CONCEPT" -> {
+                	// do nothing
+                	//  TODO Es necesario implementar este caso
                 }
                 default -> throw new IllegalArgumentException("Unknown condition type: " + type);
             }

@@ -1,0 +1,114 @@
+{
+    "events": [
+        [
+            {
+                "id": 2851,
+                "eventName": "Convivence febrero",
+                "eventDate": "2025-02-16",
+                "eventTime": "11:00:00",
+                "year": 2025,
+                "month": 2,
+                "groupNeeded": false,
+                "groupAssigned": false,
+                "published": false,
+                "eventType": "Community"
+            },
+            {
+                "id": 2866,
+                "eventName": "Eucharist febrero",
+                "eventDate": "2025-02-01",
+                "eventTime": "20:30:00",
+                "year": 2025,
+                "month": 2,
+                "groupNeeded": false,
+                "groupAssigned": false,
+                "published": false,
+                "eventType": "Liturgy"
+            },
+            {
+                "id": 2867,
+                "eventName": "Eucharist febrero",
+                "eventDate": "2025-02-08",
+                "eventTime": "20:30:00",
+                "year": 2025,
+                "month": 2,
+                "groupNeeded": false,
+                "groupAssigned": false,
+                "published": false,
+                "eventType": "Liturgy"
+            },
+            {
+                "id": 2868,
+                "eventName": "Eucharist febrero",
+                "eventDate": "2025-02-15",
+                "eventTime": "20:30:00",
+                "year": 2025,
+                "month": 2,
+                "groupNeeded": false,
+                "groupAssigned": false,
+                "published": false,
+                "eventType": "Liturgy"
+            },
+            {
+                "id": 2869,
+                "eventName": "Eucharist febrero",
+                "eventDate": "2025-02-22",
+                "eventTime": "20:30:00",
+                "year": 2025,
+                "month": 2,
+                "groupNeeded": false,
+                "groupAssigned": false,
+                "published": false,
+                "eventType": "Liturgy"
+            },
+            {
+                "id": 2918,
+                "eventName": "Presentation Word",
+                "eventDate": "2025-02-04",
+                "eventTime": "21:00:00",
+                "year": 2025,
+                "month": 2,
+                "groupNeeded": false,
+                "groupAssigned": false,
+                "published": false,
+                "eventType": "Word"
+            },
+            {
+                "id": 2919,
+                "eventName": "Domestical scrutiny",
+                "eventDate": "2025-02-11",
+                "eventTime": "21:00:00",
+                "year": 2025,
+                "month": 2,
+                "groupNeeded": false,
+                "groupAssigned": false,
+                "published": false,
+                "eventType": "Word"
+            },
+            {
+                "id": 2920,
+                "eventName": "Conclusion Word",
+                "eventDate": "2025-02-18",
+                "eventTime": "21:00:00",
+                "year": 2025,
+                "month": 2,
+                "groupNeeded": false,
+                "groupAssigned": false,
+                "published": false,
+                "eventType": "Word"
+            },
+            {
+                "id": 2921,
+                "eventName": "Guarantors",
+                "eventDate": "2025-02-25",
+                "eventTime": "21:00:00",
+                "year": 2025,
+                "month": 2,
+                "groupNeeded": false,
+                "groupAssigned": false,
+                "published": false,
+                "eventType": "Word"
+            }
+        ]
+    ]
+}
