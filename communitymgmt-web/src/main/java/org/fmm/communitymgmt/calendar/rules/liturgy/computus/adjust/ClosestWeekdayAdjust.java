@@ -2,8 +2,8 @@ package org.fmm.communitymgmt.calendar.rules.liturgy.computus.adjust;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAdjusters;
+
+import org.fmm.communitymgmt.common.util.DateUtil;
 
 public class ClosestWeekdayAdjust extends AbstractAdjust {
 	private DayOfWeek weekday;
@@ -19,6 +19,8 @@ public class ClosestWeekdayAdjust extends AbstractAdjust {
 
 	@Override
 	public LocalDate apply(LocalDate base) {
+		return DateUtil.closestDates(weekday, base);
+		/*
 		LocalDate next,previous;
 		long iN, iP;
 		next = base.with(TemporalAdjusters.nextOrSame(weekday));
@@ -31,6 +33,7 @@ public class ClosestWeekdayAdjust extends AbstractAdjust {
 			return next;
 		else
 			return previous;
+		*/
 	}
 	
     @Override

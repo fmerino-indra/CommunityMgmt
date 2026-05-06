@@ -80,15 +80,15 @@ public class RelativeToBaseComputus extends AbstractRelativeToComputus {
 	@Override
 	public LiturgyDateResult compute(int liturgicalYear, LiturgyRuleContext ctx, LiturgyRuleRegistry registry) {
 		
-		AbstractLiturgyRule baseRule = registry.get(baseRuleId);
+		AbstractLiturgyRule baseRule = registry.getFestRule(baseRuleId);
 		if (baseRule == null)
 			throw new IllegalStateException("Base rule not found: " + baseRuleId);
 		// compute base (it should have been computed earlier)
-		LocalDate baseDate = registry.getComputedDate(baseRuleId);
+		LocalDate baseDate = registry.getComputedFeastRule(baseRuleId);
 		if (baseDate == null) {
 			// If not computed yet, attempt to compute now (defensive)
 			baseDate = (LocalDate)baseRule.getComputus().compute(liturgicalYear, ctx, registry).getResult();
-			registry.setComputedDate(baseRuleId, baseDate);
+			registry.setComputedFeastRule(baseRuleId, baseDate);
 		}
 		LocalDate cur = baseDate;
 		for (AbstractAdjust adjust: getAdjustList()) {

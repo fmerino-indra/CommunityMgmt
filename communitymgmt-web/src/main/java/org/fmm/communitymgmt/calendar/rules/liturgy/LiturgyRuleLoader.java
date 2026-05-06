@@ -12,9 +12,11 @@ import java.util.List;
 import org.fmm.communitymgmt.calendar.rules.RuleKindEnum;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.AbstractComputus;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.EasterComputus;
+import org.fmm.communitymgmt.calendar.rules.liturgy.computus.FeastPeriod;
+import org.fmm.communitymgmt.calendar.rules.liturgy.computus.FeastPeriodComputus;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.FixedComputus;
-import org.fmm.communitymgmt.calendar.rules.liturgy.computus.Period;
-import org.fmm.communitymgmt.calendar.rules.liturgy.computus.PeriodComputus;
+import org.fmm.communitymgmt.calendar.rules.liturgy.computus.FixedPeriod;
+import org.fmm.communitymgmt.calendar.rules.liturgy.computus.FixedPeriodComputus;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.RelativeToBaseComputus;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.RelativeToFixedComputus;
 import org.fmm.communitymgmt.calendar.rules.liturgy.computus.RelativeToInlineComputus;
@@ -141,14 +143,16 @@ public class LiturgyRuleLoader {
         	if (rule.getKind().equals(RuleKindEnum.LITURGY))
         		registry.register((LiturgyRule)rule);
         	else if (rule.getKind().equals(RuleKindEnum.LITURGICAL_PERIOD))
-        		registry.register((LiturgicalPeriodRule)rule);
+        		registry.registerPeriodRule((PeriodRule)rule);
         }
         for (JsonNode node : root.get("period-rules")) {
         	rule = parseRule(node);
         	if (rule.getKind().equals(RuleKindEnum.LITURGY))
         		registry.register((LiturgyRule)rule);
         	else if (rule.getKind().equals(RuleKindEnum.LITURGICAL_PERIOD))
-        		registry.register((LiturgicalPeriodRule)rule);
+        		registry.registerPeriodRule((PeriodRule)rule);
+        	else if (rule.getKind().equals(RuleKindEnum.FUNCTIONAL_PERIOD))
+        		registry.registerPeriodRule((PeriodRule)rule);
         }
         
         return registry;
@@ -170,20 +174,18 @@ public class LiturgyRuleLoader {
         //List<RuleCondition> conditions = parseConditions(node.get("conditions"));
 
         AbstractComputus computus = parseComputus(node.get("payload").get("computus"));
+        
         if (kind.equals(RuleKindEnum.LITURGY.toString())) {
             return new LiturgyRule(id, name, liturgicalYearShift,scope, computus,override);
         	
         } else if (kind.equals(RuleKindEnum.LITURGICAL_PERIOD.toString())) {
-            return new LiturgicalPeriodRule(id, name, liturgicalYearShift,scope, computus,override);
-        	
+            return new PeriodRule(id, name, liturgicalYearShift, RuleKindEnum.LITURGICAL_PERIOD,scope, computus,override);
+            		//RuleKindEnum.valueOf(kind)        	
+        } else if (kind.equals(RuleKindEnum.FUNCTIONAL_PERIOD.toString())){
+        	return new PeriodRule(id,name, liturgicalYearShift, RuleKindEnum.FUNCTIONAL_PERIOD, scope, computus,override);
         } else {
         	throw new RuntimeException("[FMMP] Bad JSON structure");
         }
-        /*
-        if (!kind.equals("LITURGY") && !kind.equals("PERIOD_LITURGY"))
-        	throw new RuntimeException("[FMMP] Bad JSON structure");
-        return new LiturgyRule(id, name, liturgicalYearShift,scope, computus,override);
-        */
     }
 
     /**
@@ -225,17 +227,18 @@ public class LiturgyRuleLoader {
     	List<AbstractAdjust> adjustList = null;
     	
     	JsonNode periodJson;
-    	Period period = null;
+    	FeastPeriod feastPeriod = null;
+    	FixedPeriod fixedPeriod = null;
+		periodJson = node.get("period");
     	
     	adjustJson = node.get("adjust");
     	if (adjustJson != null)
     		adjustList = parseAdjust(adjustJson);
-    	else {
-    		periodJson = node.get("period");
+    		/*
     		if (periodJson != null) {
     			period = parsePeriod(periodJson);
     		}
-    	}
+    		*/
         switch (type) {
         /*
  		*/
@@ -262,15 +265,29 @@ public class LiturgyRuleLoader {
 			base = node.get("base").asText();
 			computus = new RelativeToBaseComputus(base, adjustList);
 		}
-		case "RELATIVE_TO_PERIOD_COMPUTUS" -> {
-			computus = new PeriodComputus(period );
+		case "FEAST_PERIOD_COMPUTUS" -> {
+    		if (periodJson != null) {
+    			feastPeriod = parseFeastPeriod(periodJson);
+    		}
+			computus = new FeastPeriodComputus(feastPeriod );
 		}
+        case "FIXED_RANGE_COMPUTUS" -> {
+    		if (periodJson != null) {
+    			fixedPeriod = parseFixedPeriod(periodJson);
+    		}
+        	computus = new FixedPeriodComputus(fixedPeriod);
+        }
         }
         
         return computus;
     }
-    private Period parsePeriod(JsonNode periodJson) {
-		return Period.fromJsonNode(periodJson);
+    
+    private FeastPeriod parseFeastPeriod(JsonNode periodJson) {
+		return FeastPeriod.fromJsonNode(periodJson);
+	}
+
+    private FixedPeriod parseFixedPeriod(JsonNode periodJson) {
+		return FixedPeriod.fromJsonNode(periodJson);
 	}
 
 /**

@@ -4,7 +4,6 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.fmm.communitymgmt.calendar.rules.RulesEngine;
-import org.fmm.communitymgmt.calendar.rules.liturgy.AbstractLiturgyRule;
 import org.fmm.communitymgmt.calendar.rules.liturgy.LiturgyRuleLoader;
 import org.fmm.communitymgmt.calendar.rules.planning.PlanningRule;
 import org.fmm.communitymgmt.calendar.rules.planning.PlanningRuleLoader;
@@ -28,7 +27,7 @@ public class CommunityMgmtRulesConfig {
 	
 	@Bean
 	public List<PlanningRule> ruleList() throws Exception {
-		Resource resource = resourceLoader.getResource("classpath:planning/rules-planning-v3.json");
+		Resource resource = resourceLoader.getResource("classpath:planning/rules-planning-v4.json");
 		Path path = resource.getFile().toPath();
 		return ruleLoader.load(path);
 	}

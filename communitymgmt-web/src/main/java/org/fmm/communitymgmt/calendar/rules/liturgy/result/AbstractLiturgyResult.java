@@ -9,11 +9,12 @@ public abstract class AbstractLiturgyResult<T> {
 		this.result=result;
     }
 
-    @Override
-    public String toString() {
-        return String.format("LiturgicalPeriodResult{ %s }", result);
-    }
 	public T getResult() {
 		return result;
 	}
+
+	@Override
+    public String toString() {
+        return String.format("LiturgicalPeriodResult{ %s }", result);
+    }
 }

@@ -1,6 +1,7 @@
 package org.fmm.communitymgmt.common.model.calendar;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -28,8 +29,18 @@ public class LiturgicalYear implements Serializable {
 	@Column
 	private String yearName;
 	
+	// Siempre será 1º domingo de Adviento
+	@Column
+	private LocalDate firstYearDate;
+	
+	@Column
+	private LocalDate lastYearDate;
+	
     @OneToMany(mappedBy = "year", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LiturgicalFeast> feasts;
+    
+    @OneToMany(mappedBy = "year", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AbstractPeriod> periods;
     
 	public LiturgicalYear() {
 	}
@@ -66,8 +77,32 @@ public class LiturgicalYear implements Serializable {
 		this.feasts = feasts;
 	}
 
+	public List<AbstractPeriod> getPeriods() {
+		return periods;
+	}
+
+	public void setPeriods(List<AbstractPeriod> periods) {
+		this.periods = periods;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("%s(%d)", getYearName(), getId());
+	}
+
+	public LocalDate getFirstYearDate() {
+		return firstYearDate;
+	}
+
+	public void setFirstYearDate(LocalDate firstYearDate) {
+		this.firstYearDate = firstYearDate;
+	}
+
+	public LocalDate getLastYearDate() {
+		return lastYearDate;
+	}
+
+	public void setLastYearDate(LocalDate lastYearDate) {
+		this.lastYearDate = lastYearDate;
 	}
 }

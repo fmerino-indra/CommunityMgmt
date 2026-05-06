@@ -158,17 +158,17 @@ public class CommunityPlanningServiceImpl implements CommunityPlanningService {
 		
 		List<LocalDate> eucharistDates = getDaysOfWeek(fromLDT, toLDT, DayOfWeek.SATURDAY);
 		//tEventTypeRepository.findAll();
-		Event convivence = null;
+		Event eucharist = null;
 		for (LocalDate date: eucharistDates) {
-			convivence = new Event();
-			convivence.setEventDate(date);
-			convivence.setEventTime(time);
-			convivence.setEventName(String.format("Eucharist %s",date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault())));
-			convivence.setCommunity(community);
-			convivence.setGroupNeeded(true);
-			convivence.setTripodType(TTripod.from(TripodEnum.LITURGY));
-			convivence.setEventLocation(TEventType.from(EventTypeEnum.INPARISH));
-			eventRepository.save(convivence);
+			eucharist = new Event();
+			eucharist.setEventDate(date);
+			eucharist.setEventTime(time);
+			eucharist.setEventName(String.format("Eucharist %s",date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault())));
+			eucharist.setCommunity(community);
+			eucharist.setGroupNeeded(true);
+			eucharist.setTripodType(TTripod.from(TripodEnum.LITURGY));
+			eucharist.setEventLocation(TEventType.from(EventTypeEnum.INPARISH));
+			eventRepository.save(eucharist);
 		}
 	}
 	

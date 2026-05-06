@@ -80,3 +80,7 @@ build/
 /database/
 /login-social-front/
 /resources/
+
+### CommunityMgmt ###
+/doc/pdf/**
+/mal/**

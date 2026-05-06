@@ -97,7 +97,8 @@ public class PlanningRuleLoader {
                 		new WeekOfCondition(v.get("date").asText(), offset)
                 	);
                 }
-                case "PERIOD_CONCEPT" -> {
+                case "FUNCTIONAL_PERIOD" -> {
+                	System.out.println(v);
                 	// do nothing
                 	//  TODO Es necesario implementar este caso
                 }

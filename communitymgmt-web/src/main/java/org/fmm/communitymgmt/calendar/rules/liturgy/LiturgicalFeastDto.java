@@ -49,6 +49,7 @@ public class LiturgicalFeastDto {
 		feast.setFeastDate(dto.date);
 		feast.setName(dto.getName());
 		feast.setRuleId(dto.ruleId);
+
 		
 		return feast;
 	}

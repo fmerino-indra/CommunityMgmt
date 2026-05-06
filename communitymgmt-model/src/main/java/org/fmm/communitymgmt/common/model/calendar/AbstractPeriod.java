@@ -32,6 +32,7 @@ public class AbstractPeriod {
 	private LocalDate initDate;
 	@Column
 	private LocalDate endDate;
+	
 	@ManyToOne
 	@JoinColumn(name = "year_id", insertable = true, updatable = true, nullable = false)
 	@JsonBackReference

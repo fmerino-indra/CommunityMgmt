@@ -71,7 +71,7 @@ class LiturgicalRulesEvaluatorTest {
         LiturgicalFeastDto firstAdvent = byId.apply("first_sunday_advent");
         LiturgicalFeastDto christTheKing = byId.apply("christ_the_king");
 
-        LiturgyPeriodResult periodResult = liturgicalRegistry.getComputedResults("advent");
+        LiturgyPeriodResult periodResult = liturgicalRegistry.getComputedPeriodRule("advent");
         logger.debug("{}", periodResult.getResult().toString());
         
         assertNotNull(easter, "Easter must be computed");

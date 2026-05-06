@@ -24,6 +24,6 @@ public class OpenCourseServiceIntegrationTest {
 	
 	@Test
 	public void testOpenCourse() {
-		openCourseService.openCourse(2026);
+		openCourseService.openCourse(2025);
 	}
 }

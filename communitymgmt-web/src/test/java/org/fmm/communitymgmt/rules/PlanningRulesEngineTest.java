@@ -20,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest
 @ActiveProfiles("test")
 
-class RulesEngineTest {
+class PlanningRulesEngineTest {
 
     @Autowired
     private PlanningRulesEngine engine;

@@ -470,10 +470,16 @@
       "kind": "FUNCTIONAL_PERIOD",
       "payload": {
         "computus": {
-          "type": "FIXED_RANGE",
+          "type": "FIXED_RANGE_COMPUTUS",
           "period": {
-            "init": "",
-            "end": ""
+            "initFix": {
+              "day": 1,
+              "month": 7
+            },
+            "endFix": {
+              "day": 31,
+              "month": 8
+            }
           }
         }
       }
@@ -485,10 +491,10 @@
       "kind": "LITURGICAL_PERIOD",
       "payload": {
         "computus": {
-          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "type": "FEAST_PERIOD_COMPUTUS",
           "period": {
-            "init": "first_sunday_advent",
-            "end": "christmas"
+            "initFeast": "first_sunday_advent",
+            "endFeast": "christmas"
           }
         }
       }
@@ -500,10 +506,10 @@
       "kind": "LITURGICAL_PERIOD",
       "payload": {
         "computus": {
-          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "type": "FEAST_PERIOD_COMPUTUS",
           "period": {
-            "init": "christmas",
-            "end": "baptism_of_the_lord"
+            "initFeast": "christmas",
+            "endFeast": "baptism_of_the_lord"
           }
         }
       }
@@ -515,10 +521,10 @@
       "kind": "LITURGICAL_PERIOD",
       "payload": {
         "computus": {
-          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "type": "FEAST_PERIOD_COMPUTUS",
           "period": {
-            "init": "baptism_of_the_lord",
-            "end": "ash_wednesday"
+            "initFeast": "baptism_of_the_lord",
+            "endFeast": "ash_wednesday"
           }
         }
       }
@@ -530,10 +536,10 @@
       "kind": "LITURGICAL_PERIOD",
       "payload": {
         "computus": {
-          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "type": "FEAST_PERIOD_COMPUTUS",
           "period": {
-            "init": "ash_wednesday",
-            "end": "holy_thursday"
+            "initFeast": "ash_wednesday",
+            "endFeast": "holy_thursday"
           }
         }
       }
@@ -545,10 +551,10 @@
       "kind": "LITURGICAL_PERIOD",
       "payload": {
         "computus": {
-          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "type": "FEAST_PERIOD_COMPUTUS",
           "period": {
-            "init": "palm_sunday",
-            "end": "easter"
+            "initFeast": "palm_sunday",
+            "endFeast": "easter"
           }
         }
       }
@@ -560,10 +566,10 @@
       "kind": "LITURGICAL_PERIOD",
       "payload": {
         "computus": {
-          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "type": "FEAST_PERIOD_COMPUTUS",
           "period": {
-            "init": "holy_thursday",
-            "end": "easter"
+            "initFeast": "holy_thursday",
+            "endFeast": "easter"
           }
         }
       }
@@ -575,10 +581,10 @@
       "kind": "LITURGICAL_PERIOD",
       "payload": {
         "computus": {
-          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "type": "FEAST_PERIOD_COMPUTUS",
           "period": {
-            "init": "easter",
-            "end": "pentecost"
+            "initFeast": "easter",
+            "endFeast": "pentecost"
           }
         }
       }
@@ -590,14 +596,13 @@
       "kind": "LITURGICAL_PERIOD",
       "payload": {
         "computus": {
-          "type": "RELATIVE_TO_PERIOD_COMPUTUS",
+          "type": "FEAST_PERIOD_COMPUTUS",
           "period": {
-            "init": "pentecost",
-            "end": "christ_the_king"
+            "initFeast": "pentecost",
+            "endFeast": "christ_the_king"
           }
         }
       }
     }
-
   ]
 }

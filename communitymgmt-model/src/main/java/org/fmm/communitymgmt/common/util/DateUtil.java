@@ -4,11 +4,13 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -102,6 +104,38 @@ public class DateUtil {
     
     public static Long toEpochDays(int year, int month, int day) {
     	return LocalDate.of(year, month, day).toEpochDay();
+    }
+
+    public static LocalDate closestDates(DayOfWeek weekday, LocalDate base) {
+		LocalDate next,previous;
+		long iN, iP;
+		next = base.with(TemporalAdjusters.nextOrSame(weekday));
+		previous = base.with(TemporalAdjusters.previousOrSame(weekday));
+		
+		iN = Math.abs(ChronoUnit.DAYS.between(next, base));
+		iP = Math.abs(ChronoUnit.DAYS.between(base, previous));
+		
+		if (iN<iP)
+			return next;
+		else
+			return previous;
+    }
+    
+    // Hay que incluir el año litúrgico. P.ej. Curso (2025,2026) -> 2026
+    public static LocalDate computeFirstSundayOfAdvent(int calendarYear) {
+		LocalDate anchor = LocalDate.of(calendarYear-1, Month.NOVEMBER, 30);
+		return DateUtil.closestDates(DayOfWeek.SUNDAY, anchor);
+    }
+
+    // Hay que incluir el año litúrgico. P.ej. Curso (2025,2026) -> 2026
+    public static LocalDate computeLastSundayOfAdvent(int calendarYear) {
+		LocalDate anchor = LocalDate.of(calendarYear, Month.NOVEMBER, 30);
+		return DateUtil.closestDates(DayOfWeek.SUNDAY, anchor).minusDays(7);
+    }
+    
+    public static LocalDate computeLastDayOfYear(int calendarYear) {
+		LocalDate anchor = LocalDate.of(calendarYear, Month.NOVEMBER, 30);
+		return DateUtil.closestDates(DayOfWeek.SUNDAY, anchor).minusDays(1);
     }
 
 }
